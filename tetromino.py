@@ -14,6 +14,7 @@ class Tetromino:
         # set grid_height and grid_width from input parameters
         self.grid_height = grid_height
         self.grid_width = grid_width
+        self.full_grid_width = grid_width + grid_width/3
         # set the shape of the tetromino based on the given type
         occupied_tiles = []
         if type == 'I':
@@ -65,24 +66,51 @@ class Tetromino:
             occupied_tiles.append((1, 1))
             occupied_tiles.append((1, 2))
             occupied_tiles.append((2, 1))
-            # create a matrix of numbered tiles based on the shape of the tetromino
+        self.occupied_tiles = occupied_tiles
+        self.n = n
+        # create a matrix of numbered tiles based on the shape of the tetromino
         self.tile_matrix = np.full((n, n), None)
         # initial position of the bottom-left tile in the tile matrix just before
         # the tetromino enters the game grid
         self.bottom_left_corner = Point()
         # upper side of the game grid
-        self.bottom_left_corner.y = grid_height
-        # a random horizontal position
-        self.bottom_left_corner.x = random.randint(0, grid_width - n)
+        self.bottom_left_corner.y = 1
+        # constant horizontal position to show next tetromino
+        # if the type is O, increase x coordinate to center the tetromino
+        if type == 'O':
+            self.bottom_left_corner.x = self.grid_width + 1
+        else:
+            self.bottom_left_corner.x = self.grid_width + 0.5
         # create each tile by computing its position w.r.t. the game grid based on
         # its bottom_left_corner
-        for i in range(len(occupied_tiles)):
-            col_index, row_index = occupied_tiles[i][0], occupied_tiles[i][1]
+        for i in range(len(self.occupied_tiles)):
+            col_index, row_index = self.occupied_tiles[i][0], self.occupied_tiles[i][1]
             position = Point()
             # horizontal position of the tile
             position.x = self.bottom_left_corner.x + col_index
             # vertical position of the tile
             position.y = self.bottom_left_corner.y + (n - 1) - row_index
+            # create the tile on the computed position
+            self.tile_matrix[row_index][col_index] = Tile(position)
+
+    # Method for the random position of the current tetromino
+    def position(self):
+        # initial position of the bottom-left tile in the tile matrix just before
+        # the tetromino enters the game grid
+        self.bottom_left_corner = Point()
+        # upper side of the game grid
+        self.bottom_left_corner.y = self.grid_height
+        # a random horizontal position
+        self.bottom_left_corner.x = random.randint(0, self.grid_width - self.n)
+        # create each tile by computing its position w.r.t. the game grid based on
+        # its bottom_left_corner
+        for i in range(len(self.occupied_tiles)):
+            col_index, row_index = self.occupied_tiles[i][0], self.occupied_tiles[i][1]
+            position = Point()
+            # horizontal position of the tile
+            position.x = self.bottom_left_corner.x + col_index
+            # vertical position of the tile
+            position.y = self.bottom_left_corner.y + (self.n - 1) - row_index
             # create the tile on the computed position
             self.tile_matrix[row_index][col_index] = Tile(position)
 
@@ -99,8 +127,7 @@ class Tetromino:
                     if position.y < self.grid_height:
                         self.tile_matrix[row][col].draw()
 
-                        # Method for moving the tetromino in a given direction by 1 on the game grid
-
+    # Method for moving the tetromino in a given direction by 1 on the game grid
     def move(self, direction, game_grid):
         # check if the tetromino can be moved in the given direction by using the
         # can_be_moved method defined below

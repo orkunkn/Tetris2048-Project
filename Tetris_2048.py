@@ -14,22 +14,31 @@ from tetromino import Tetromino  # class for modeling the tetrominoes
 def start():
     # set the dimensions of the game grid
     grid_h, grid_w = 20, 12
+    # right information grid
+    information_grid_h, information_grid_w = grid_h, grid_w / 3
+    # sum of game and information grid
+    full_grid_h, full_grid_w = grid_h, grid_w + information_grid_w
     # set the size of the drawing canvas
-    canvas_h, canvas_w = 40 * grid_h, 40 * grid_w
+    canvas_h, canvas_w = 40 * full_grid_h, 40 * full_grid_w
     stddraw.setCanvasSize(canvas_w, canvas_h)
     # set the scale of the coordinate system
-    stddraw.setXscale(-0.5, grid_w - 0.5)
-    stddraw.setYscale(-0.5, grid_h - 0.5)
+    stddraw.setXscale(-0.5, full_grid_w - 0.5)
+    stddraw.setYscale(-0.5, full_grid_h - 0.5)
 
     # create the game grid
-    grid = GameGrid(grid_h, grid_w)
+    grid = GameGrid(grid_h, grid_w, full_grid_h, full_grid_w)
     # create the first tetromino to enter the game grid
     # by using the create_tetromino function defined below
     current_tetromino = create_tetromino(grid_h, grid_w)
+    # set the position of current tetromino
+    current_tetromino.position()
     grid.current_tetromino = current_tetromino
+    # create the next tetromino to show
+    next_tetromino = create_tetromino(grid_h, grid_w)
+    grid.next_tetromino = next_tetromino
 
     # display a simple menu before opening the game
-    display_game_menu(grid_h, grid_w)
+    display_game_menu(full_grid_h, full_grid_w)
 
     # main game loop (keyboard interaction for moving the tetromino)
     while True:
@@ -66,8 +75,14 @@ def start():
                 break
             # create the next tetromino to enter the game grid
             # by using the create_tetromino function defined below
-            current_tetromino = create_tetromino(grid_h, grid_w)
+            # set the position of the next tetromino
+            next_tetromino.position()
+            # change current tetromino to next tetromino
+            current_tetromino = next_tetromino
             grid.current_tetromino = current_tetromino
+            # create next tetromino
+            next_tetromino = create_tetromino(grid_h, grid_w)
+            grid.next_tetromino = next_tetromino
 
         # display the game grid and as well the current tetromino
         grid.display()
@@ -87,7 +102,7 @@ def create_tetromino(grid_height, grid_width):
 
 
 # Function for displaying a simple menu before starting the game
-def display_game_menu(grid_height, grid_width):
+def display_game_menu(full_grid_height, full_grid_width):
     # colors used for the menu
     background_color = Color(42, 69, 99)
     button_color = Color(25, 255, 228)
@@ -99,13 +114,13 @@ def display_game_menu(grid_height, grid_width):
     # path of the image file
     img_file = current_dir + "/menu_image.png"
     # center coordinates to display the image
-    img_center_x, img_center_y = (grid_width - 1) / 2, grid_height - 7
+    img_center_x, img_center_y = (full_grid_width - 1) / 2, full_grid_height - 7
     # image is represented using the Picture class
     image_to_display = Picture(img_file)
     # display the image
     stddraw.picture(image_to_display, img_center_x, img_center_y)
     # dimensions of the start game button
-    button_w, button_h = grid_width - 1.5, 2
+    button_w, button_h = full_grid_width - 1.5, 2
     # coordinates of the bottom left corner of the start game button
     button_blc_x, button_blc_y = img_center_x - button_w / 2, 4
     # display the start game button as a filled rectangle
@@ -113,9 +128,9 @@ def display_game_menu(grid_height, grid_width):
     stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
     # display the text on the start game button
     stddraw.setFontFamily("Arial")
-    stddraw.setFontSize(25)
+    stddraw.setFontSize(40)
     stddraw.setPenColor(text_color)
-    text_to_display = "Click Here to Start the Game"
+    text_to_display = "Start"
     stddraw.text(img_center_x, 5, text_to_display)
     # menu interaction loop
     while True:

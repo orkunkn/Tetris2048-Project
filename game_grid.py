@@ -7,14 +7,18 @@ from color import Color  # used for coloring the game grid
 # Class used for modelling the game grid
 class GameGrid:
     # Constructor for creating the game grid based on the given arguments
-    def __init__(self, grid_h, grid_w):
+    def __init__(self, grid_h, grid_w, full_grid_h, full_grid_w):
         # set the dimensions of the game grid as the given arguments
         self.grid_height = grid_h
         self.grid_width = grid_w
+        self.full_grid_height = full_grid_h
+        self.full_grid_width = full_grid_w
         # create the tile matrix to store the tiles placed on the game grid
         self.tile_matrix = np.full((grid_h, grid_w), None)
         # the tetromino that is currently being moved on the game grid
         self.current_tetromino = None
+        # next tetromino
+        self.next_tetromino = None
         # game_over flag shows whether the game is over/completed or not
         self.game_over = False
         # set the color used for the empty grid cells
@@ -37,6 +41,8 @@ class GameGrid:
             self.current_tetromino.draw()
         # draw a box around the game grid
         self.draw_boundaries()
+        # draw the second grid for showing score and next tetromino
+        self.draw_information_grid()
         # show the resulting drawing with a pause duration = 250 ms
         stddraw.show(250)
 
@@ -109,3 +115,23 @@ class GameGrid:
                         self.game_over = True
         # return the game_over flag
         return self.game_over
+
+    # Method for drawing the information grid
+    def draw_information_grid(self):
+        # coordinates of left down corner of the grid
+        pos_x, pos_y = -0.5, -0.5
+        # set the color of information grid
+        GRAY = Color(128, 128, 128)
+        stddraw.setPenColor(GRAY)
+        # draw the information grid
+        stddraw.rectangle(pos_x + self.grid_width, pos_y, self.grid_width, self.grid_height)
+        stddraw.filledRectangle(pos_x + self.grid_width, pos_y, self.grid_width, self.grid_height)
+        # print the information titles (SCORE and NEXT)
+        stddraw.setPenColor(stddraw.BLACK)
+        stddraw.setFontSize(self.grid_width * 2)
+        stddraw.boldText((self.full_grid_width - self.grid_width)/2.6 + self.grid_width, self.grid_height - 1, "SCORE")
+        stddraw.boldText((self.full_grid_width - self.grid_width)/2.6 + self.grid_width, 5, "NEXT")
+        # print the score
+        # stddraw.boldText((self.full_grid_width - self.grid_width)/2.6 + self.grid_width, self.grid_height - 2, score)
+        # draw the next tetromino on information grid
+        self.next_tetromino.draw()

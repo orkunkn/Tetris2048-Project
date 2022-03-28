@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="417d869b-aa1f-4202-a19b-eefda2b2e401" name="Changes" comment="Added 'L', 'J', 'S', 'T' shapes.">
+    <list default="true" id="417d869b-aa1f-4202-a19b-eefda2b2e401" name="Changes" comment="Thinned the grid boundaries by 4x.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tetris_2048.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tetris_2048.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game_grid.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_grid.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tetromino.py" beforeDir="false" afterPath="$PROJECT_DIR$/tetromino.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
