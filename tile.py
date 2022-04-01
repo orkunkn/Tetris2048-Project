@@ -1,4 +1,7 @@
 import copy as cp  # the copy module is used for copying tile positions
+import random
+
+import numpy as np
 
 import stddraw  # the stddraw module is used as a basic graphics library
 from color import Color  # used for coloring the tile and the number on it
@@ -17,7 +20,11 @@ class Tile:
     # Constructor that creates a tile at a given position with 2 as its number
     def __init__(self, position=Point(0, 0)):  # (0, 0) is the default position
         # assign the number on the tile
-        self.number = 2
+        temp = random.randint(0, 1)
+        if (temp == 0):
+            self.number = 2
+        else:
+            self.number = 4
         # set the colors of the tile
         self.background_color = Color(151, 178, 199)  # background (tile) color
         self.foreground_color = Color(0, 100, 200)  # foreground (number) color
@@ -31,6 +38,22 @@ class Tile:
         self.position = cp.copy(position)
 
         # Getter method for the position of the tile
+    #r
+    def rotateTile(self, centerCoord, rotDir): # 1 for right -1 for left
+        relativeCoord = []
+        clockwiseArr=np.array([[0,1],[-1,0]])
+        counterClockwiseArrr=np.array([[0,-1],[1,0]])
+        relativeCoord.append(self.position.x-centerCoord.x)
+        relativeCoord.append(self.position.y - centerCoord.y)
+        if (rotDir == 1):
+            newCoord = np.dot(clockwiseArr,relativeCoord)
+            self.position.x=newCoord[0]+centerCoord.x
+            self.position.y=newCoord[1]+centerCoord.y
+        else:
+            newCoord = np.dot(counterClockwiseArrr,relativeCoord)
+            self.position.x=newCoord[0]+centerCoord.x
+            self.position.y=newCoord[1]+centerCoord.y
+
 
     def get_position(self):
         # return the position of the tile

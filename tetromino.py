@@ -12,6 +12,7 @@ class Tetromino:
     # Constructor to create a tetromino with a given type (shape)
     def __init__(self, type, grid_height, grid_width):
         # set grid_height and grid_width from input parameters
+        self.type = type
         self.grid_height = grid_height
         self.grid_width = grid_width
         self.full_grid_width = grid_width + grid_width/3
@@ -126,6 +127,51 @@ class Tetromino:
                     position = self.tile_matrix[row][col].get_position()
                     if position.y < self.grid_height:
                         self.tile_matrix[row][col].draw()
+    def rotateTetromino(self, rotDir, game_grid, key=0):
+        print('rotat')
+        n = len(self.tile_matrix)
+        if not (self.type=='5'): # remove
+            center1=Point()
+            center1.x=self.bottom_left_corner.x+1
+            center1.y=self.bottom_left_corner.y+1
+            for row in range(n):
+                for col in range(n):
+                    tile =self.tile_matrix[row][col]
+                    if tile is not None:
+                        tile.rotateTile(center1, rotDir)
+
+            if not (self.canRotate(game_grid)):
+                print('revert')
+                for row in range(n):
+                    for col in range(n):
+                        tile = self.tile_matrix[row][col]
+                        if tile is None:
+                            break
+                        tile.rotateTile(center1, -1*rotDir)
+    def canRotate(self, game_grid):
+
+        print('can rot')
+        n= len(self.tile_matrix)
+        for row in range(n):
+            for col in range(n):
+                if(self.tile_matrix[row][col]==None):
+                    break
+                currTile=self.tile_matrix[row][col].get_position()
+                if(currTile.x<1):
+
+                    return False
+
+                if(currTile.x>= self.grid_width ):
+
+                    return False
+                if (currTile.y <= 0):
+                    print('c')
+                    return False
+                if (game_grid.is_occupied(currTile.y,currTile.x)):
+                    print('c')
+                    return False
+            break
+        return True
 
     # Method for moving the tetromino in a given direction by 1 on the game grid
     def move(self, direction, game_grid):
