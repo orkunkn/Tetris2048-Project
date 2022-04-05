@@ -21,7 +21,7 @@ class Tile:
     def __init__(self, position=Point(0, 0)):  # (0, 0) is the default position
         # assign the number on the tile
         temp = random.randint(0, 1)
-        if (temp == 0):
+        if temp == 0:
             self.number = 2
         else:
             self.number = 4
@@ -37,30 +37,28 @@ class Tile:
         # set the position of the tile as the given position
         self.position = cp.copy(position)
 
-        # Getter method for the position of the tile
-    #r
-    def rotateTile(self, centerCoord, rotDir): # 1 for right -1 for left
-        relativeCoord = []
-        clockwiseArr=np.array([[0,1],[-1,0]])
-        counterClockwiseArrr=np.array([[0,-1],[1,0]])
-        relativeCoord.append(self.position.x-centerCoord.x)
-        relativeCoord.append(self.position.y - centerCoord.y)
-        if (rotDir == 1):
-            newCoord = np.dot(clockwiseArr,relativeCoord)
-            self.position.x=newCoord[0]+centerCoord.x
-            self.position.y=newCoord[1]+centerCoord.y
-        else:
-            newCoord = np.dot(counterClockwiseArrr,relativeCoord)
-            self.position.x=newCoord[0]+centerCoord.x
-            self.position.y=newCoord[1]+centerCoord.y
-
-
+    # Getter method for the position of the tile
     def get_position(self):
         # return the position of the tile
         return cp.copy(self.position)
 
-        # Method for moving the tile by dx along the x-axis and by dy along the y-axis
+    # r
+    def rotateTile(self, centerCoord, rotDir):  # 1 for right -1 for left
+        relativeCoord = []
+        clockwiseArr = np.array([[0, 1], [-1, 0]])
+        counterClockwiseArrr = np.array([[0, -1], [1, 0]])
+        relativeCoord.append(self.position.x - centerCoord.x)
+        relativeCoord.append(self.position.y - centerCoord.y)
+        if rotDir == 1:
+            newCoord = np.dot(clockwiseArr, relativeCoord)
+            self.position.x = newCoord[0] + centerCoord.x
+            self.position.y = newCoord[1] + centerCoord.y
+        else:
+            newCoord = np.dot(counterClockwiseArrr, relativeCoord)
+            self.position.x = newCoord[0] + centerCoord.x
+            self.position.y = newCoord[1] + centerCoord.y
 
+    # Method for moving the tile by dx along the x-axis and by dy along the y-axis
     def move(self, dx, dy):
         self.position.translate(dx, dy)
 

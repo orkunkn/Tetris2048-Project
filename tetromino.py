@@ -15,7 +15,7 @@ class Tetromino:
         self.type = type
         self.grid_height = grid_height
         self.grid_width = grid_width
-        self.full_grid_width = grid_width + grid_width/3
+        self.full_grid_width = grid_width + grid_width / 3
         # set the shape of the tetromino based on the given type
         occupied_tiles = []
         if type == 'I':
@@ -113,7 +113,7 @@ class Tetromino:
             # vertical position of the tile
             position.y = self.bottom_left_corner.y + (self.n - 1) - row_index
             # create the tile on the computed position
-            self.tile_matrix[row_index][col_index] = Tile(position)
+            self.tile_matrix[row_index][col_index].set_position(position)
 
     # Method for drawing the tetromino on the game grid
     def draw(self):
@@ -127,16 +127,16 @@ class Tetromino:
                     position = self.tile_matrix[row][col].get_position()
                     if position.y < self.grid_height:
                         self.tile_matrix[row][col].draw()
-    def rotateTetromino(self, rotDir, game_grid, key=0):
-        print('rotat')
+
+    def rotateTetromino(self, rotDir, game_grid):
         n = len(self.tile_matrix)
-        if not (self.type=='5'): # remove
-            center1=Point()
-            center1.x=self.bottom_left_corner.x+1
-            center1.y=self.bottom_left_corner.y+1
+        if not (self.type == '5'):  # remove
+            center1 = Point()
+            center1.x = self.bottom_left_corner.x + 1
+            center1.y = self.bottom_left_corner.y + 1
             for row in range(n):
                 for col in range(n):
-                    tile =self.tile_matrix[row][col]
+                    tile = self.tile_matrix[row][col]
                     if tile is not None:
                         tile.rotateTile(center1, rotDir)
 
@@ -147,27 +147,26 @@ class Tetromino:
                         tile = self.tile_matrix[row][col]
                         if tile is None:
                             break
-                        tile.rotateTile(center1, -1*rotDir)
+                        tile.rotateTile(center1, -1 * rotDir)
+
     def canRotate(self, game_grid):
 
         print('can rot')
-        n= len(self.tile_matrix)
+        n = len(self.tile_matrix)
         for row in range(n):
             for col in range(n):
-                if(self.tile_matrix[row][col]==None):
+                if self.tile_matrix[row][col] is None:
                     break
-                currTile=self.tile_matrix[row][col].get_position()
-                if(currTile.x<1):
-
+                currTile = self.tile_matrix[row][col].get_position()
+                if currTile.x < 1:
                     return False
 
-                if(currTile.x>= self.grid_width ):
-
+                if currTile.x >= self.grid_width:
                     return False
-                if (currTile.y <= 0):
+                if currTile.y <= 0:
                     print('c')
                     return False
-                if (game_grid.is_occupied(currTile.y,currTile.x)):
+                if game_grid.is_occupied(currTile.y, currTile.x):
                     print('c')
                     return False
             break
@@ -252,3 +251,34 @@ class Tetromino:
                             return False
                         break  # end the inner for loop
         return True  # tetromino can be moved in the given direction
+
+    # Method to merge tiles with same number
+    def merge(self, grid):
+        # Old version of merge
+        """
+        for col in range(self.n):
+            for row in range(self.n):
+                k = 0
+                if self.tile_matrix[row][col] is not None:
+                    pos = self.tile_matrix[row][col].get_position()
+                    if grid.tile_matrix[pos.y - 1][pos.x] is not None:
+                        if grid.tile_matrix[pos.y - 1][pos.x].number == grid.tile_matrix[pos.y][pos.x].number:
+                            while grid.tile_matrix[pos.y + k][pos.x] is not None:
+                                grid.tile_matrix[pos.y + k][pos.x].move(0, -1)
+                                k = k + 1
+                            grid.tile_matrix[pos.y - 1][pos.x].number = grid.tile_matrix[pos.y][pos.x].number * 2
+                            grid.tile_matrix[pos.y][pos.x] = None
+        """
+        # New version of merge
+        # check the full column and row of dropped tetromino
+        for col in reversed(range(self.bottom_left_corner.y + self.n)):
+            # check condition for bottom tile
+            if col != 0:
+                for row in range(self.bottom_left_corner.x, self.bottom_left_corner.x + self.n):
+                    # check if there are blocks on the controlled coordinates
+                    if grid.tile_matrix[col][row] is not None and grid.tile_matrix[col - 1][row] is not None:
+                        # check if the tiles in same column have the same number
+                        if grid.tile_matrix[col - 1][row].number == grid.tile_matrix[col][row].number:
+                            # double the number of bottom tile and destroy the top tile
+                            grid.tile_matrix[col - 1][row].number = grid.tile_matrix[col][row].number * 2
+                            grid.tile_matrix[col][row] = None
