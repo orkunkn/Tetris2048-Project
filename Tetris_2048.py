@@ -73,6 +73,7 @@ def start():
             # end the main game loop if the game is over
             if game_over:
                 break
+            grid.clearLines()
             # create the next tetromino to enter the game grid
             # by using the create_tetromino function defined below
             # set the position of the next tetromino
