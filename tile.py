@@ -26,7 +26,31 @@ class Tile:
         else:
             self.number = 4
         # set the colors of the tile
-        self.background_color = Color(151, 178, 199)  # background (tile) color
+        if (self.number == 2):
+            self.background_color = Color(238, 228, 218)
+        elif (self.number == 4):
+            self.background_color = Color(236, 223, 190)
+        elif (self.number == 8):
+            self.background_color = Color(243, 176, 121)
+        elif (self.number == 16):
+            self.background_color = Color(246, 149, 98)
+        elif (self.number == 32):
+            self.background_color = Color(246, 124, 94)
+        elif (self.number == 64):
+            self.background_color = Color(255, 88, 68)
+        elif (self.number == 128):
+            self.background_color = Color(243, 209, 89)
+        elif (self.number == 256):
+            self.background_color = Color(236, 203, 106)
+        elif (self.number == 512):
+            self.background_color = Color(238, 200, 82)
+        elif (self.number == 1024):
+            self.background_color = Color(233, 200, 60)
+        elif (self.number == 2048):
+            self.background_color = Color(240, 196, 36)
+        else:
+            self.background_color = Color(62, 57, 51)
+        #self.background_color = Color(151, 178, 199)  # background (tile) color
         self.foreground_color = Color(0, 100, 200)  # foreground (number) color
         self.boundary_color = Color(0, 100, 200)  # boundary (box) color
         # set the position of the tile as the given position

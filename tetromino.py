@@ -127,10 +127,9 @@ class Tetromino:
                     position = self.tile_matrix[row][col].get_position()
                     if position.y < self.grid_height:
                         self.tile_matrix[row][col].draw()
-    def rotateTetromino(self, rotDir, game_grid, key=0):
-        print('rotat')
+    def rotateTetromino(self, rotDir, grid, key=0):
         n = len(self.tile_matrix)
-        if not (self.type=='5'): # remove
+        if (key==1): #
             center1=Point()
             center1.x=self.bottom_left_corner.x+1
             center1.y=self.bottom_left_corner.y+1
@@ -139,40 +138,57 @@ class Tetromino:
                     tile =self.tile_matrix[row][col]
                     if tile is not None:
                         tile.rotateTile(center1, rotDir)
+            self.rotateTileMatrix(rotDir)
+        else:
+            self.canRotate(grid,rotDir)
 
-            if not (self.canRotate(game_grid)):
-                print('revert')
-                for row in range(n):
-                    for col in range(n):
-                        tile = self.tile_matrix[row][col]
-                        if tile is None:
-                            break
-                        tile.rotateTile(center1, -1*rotDir)
-    def canRotate(self, game_grid):
 
-        print('can rot')
-        n= len(self.tile_matrix)
+
+    # check if the upcoming rotation is valid
+    def canRotate(self, game_grid, rotDir):
+        type = self.type # needed for type specific actions
+        self.rotateTetromino(rotDir,game_grid,1) # tetromino is rotated with key=1 this means it is rotated without checking collision
+        n = len(self.tile_matrix)
+        # for each tile collision or being out of bounds is tested on the rotated tetromino
+        # if any test fails tetromino is reverted back and method returns false
         for row in range(n):
             for col in range(n):
                 if(self.tile_matrix[row][col]==None):
                     break
                 currTile=self.tile_matrix[row][col].get_position()
-                if(currTile.x<1):
-
+                if(currTile.x<0):
+                    self.rotateTetromino(rotDir*-1,game_grid,1)
+                    return False
+                # S and Z has a special case so their controls are done separately
+                if(currTile.x> self.grid_width-1 ) and (not(type== 'S' or type =='Z')):
+                    self.rotateTetromino(rotDir*-1,game_grid,1)
+                    return False
+                if (type == 'S' or type == 'Z') and (currTile.x >= self.grid_width-1 ):
+                    self.rotateTetromino(rotDir*-1,game_grid,1)
                     return False
 
-                if(currTile.x>= self.grid_width ):
-
-                    return False
-                if (currTile.y <= 0):
-                    print('c')
+                if (currTile.y < 0):
+                    self.rotateTetromino(rotDir*-1,game_grid,1)
                     return False
                 if (game_grid.is_occupied(currTile.y,currTile.x)):
-                    print('c')
+                    self.rotateTetromino(rotDir*-1,game_grid,1)
                     return False
-            break
+        # if it passes all controls it remains rotated and methods returns true
         return True
-
+    # many operations depend on the tile locations on the matrix so this method is needed
+    def rotateTileMatrix(self, rotDir): # method for rotating locations of the tiles in the tile matrix
+        # a simple array rotation algorithm is used
+        R, C = len(self.tile_matrix), len(self.tile_matrix[0])
+        newArr = np.full((C, R), None)
+        if(rotDir==-1):
+            for c in range(C):
+                for r in range(R-1,-1,-1):
+                    newArr[C-c-1][r] = self.tile_matrix[r][c]
+        else:
+            for c in range(C):
+                for r in range(R-1,-1,-1):
+                    newArr[c][R-r-1] = self.tile_matrix[r][c]
+        self.tile_matrix=newArr
     # Method for moving the tetromino in a given direction by 1 on the game grid
     def move(self, direction, game_grid):
         # check if the tetromino can be moved in the given direction by using the
@@ -235,6 +251,7 @@ class Tetromino:
                             return False
                         break  # end the inner for loop
         # direction = down --> check the bottommost tile of each column
+
         else:
             for col in range(n):
                 for row in range(n - 1, -1, -1):
@@ -252,3 +269,4 @@ class Tetromino:
                             return False
                         break  # end the inner for loop
         return True  # tetromino can be moved in the given direction
+

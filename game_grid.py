@@ -1,5 +1,5 @@
 import numpy as np  # fundamental Python module for scientific computing
-
+import copy
 import stddraw  # the stddraw module is used as a basic graphics library
 from color import Color  # used for coloring the game grid
 
@@ -8,6 +8,7 @@ from color import Color  # used for coloring the game grid
 class GameGrid:
     # Constructor for creating the game grid based on the given arguments
     def __init__(self, grid_h, grid_w, full_grid_h, full_grid_w):
+        self.score=0
         # set the dimensions of the game grid as the given arguments
         self.grid_height = grid_h
         self.grid_width = grid_w
@@ -44,7 +45,10 @@ class GameGrid:
         # draw the second grid for showing score and next tetromino
         self.draw_information_grid()
         # show the resulting drawing with a pause duration = 250 ms
-        stddraw.show(250)
+        stddraw.show(100)
+
+
+
 
     # Method for drawing the cells and the lines of the grid
     def draw_grid(self):
@@ -132,6 +136,6 @@ class GameGrid:
         stddraw.boldText((self.full_grid_width - self.grid_width)/2.6 + self.grid_width, self.grid_height - 1, "SCORE")
         stddraw.boldText((self.full_grid_width - self.grid_width)/2.6 + self.grid_width, 5, "NEXT")
         # print the score
-        # stddraw.boldText((self.full_grid_width - self.grid_width)/2.6 + self.grid_width, self.grid_height - 2, score)
+        #stddraw.boldText((self.full_grid_width - self.grid_width)/2.6 + self.grid_width, self.grid_height - 2, str(self.score))
         # draw the next tetromino on information grid
         self.next_tetromino.draw()

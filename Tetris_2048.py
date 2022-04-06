@@ -58,9 +58,13 @@ def start():
                 # move the tetromino down by one
                 # (causes the tetromino to fall down faster)
                 current_tetromino.move(key_typed, grid)
+            elif (key_typed == "a"):
+                current_tetromino.rotateTetromino(-1,grid)
+            elif (key_typed == "d"):
                 current_tetromino.rotateTetromino(1,grid)
             # clear the queue that stores all the keys pressed/typed
             stddraw.clearKeysTyped()
+
 
         # move (drop) the tetromino down by 1 at each iteration
         success = current_tetromino.move("down", grid)
@@ -69,8 +73,11 @@ def start():
         if not success:
             # get the tile matrix of the tetromino
             tiles_to_place = current_tetromino.tile_matrix
+
             # update the game grid by adding the tiles of the tetromino
             game_over = grid.update_grid(tiles_to_place)
+            #grid.clearLines()
+            #current_tetromino.merge(grid)
             # end the main game loop if the game is over
             if game_over:
                 break
