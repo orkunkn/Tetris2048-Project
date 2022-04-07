@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="417d869b-aa1f-4202-a19b-eefda2b2e401" name="Changes" comment="Thinned the grid boundaries by 4x.">
+    <list default="true" id="417d869b-aa1f-4202-a19b-eefda2b2e401" name="Changes" comment="-Fixed the bug where the next tetromino and current tetromino numbers were different.&#10;-Made some other readability improvements.&#10;-Added merge function (Not working fully).&#10;+After the merge, unmerged top blocks stay hanging.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Tetris_2048.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tetris_2048.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game_grid.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_grid.py" afterDir="false" />
@@ -13,6 +13,24 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="rotate" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="rotate" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -54,6 +72,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.Tetris_2048" />
+        <item itemvalue="Python.Tetris_2048" />
       </list>
     </recent_temporary>
   </component>
@@ -73,8 +92,33 @@
       <option name="project" value="LOCAL" />
       <updated>1648217657396</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added information grid and adjusted the start menu.">
+      <created>1648496612243</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1648496612243</updated>
+    </task>
+    <task id="LOCAL-00003" summary="-Fixed the bug where the next tetromino and current tetromino numbers were different.&#10;-Made some other readability improvements.&#10;-Added merge function (Not working fully).&#10;+After the merge, unmerged top blocks stay hanging.">
+      <created>1649148755350</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1649148755350</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -119,6 +163,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added 'L', 'J', 'S', 'T' shapes." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added 'L', 'J', 'S', 'T' shapes." />
+    <MESSAGE value="Added information grid and adjusted the start menu." />
+    <MESSAGE value="-Fixed the bug where the next tetromino and current tetromino numbers were different.&#10;-Made some other readability improvements.&#10;-Added merge function (Not working fully).&#10;+After the merge, some tiles stay hanging." />
+    <option name="LAST_COMMIT_MESSAGE" value="-Fixed the bug where the next tetromino and current tetromino numbers were different.&#10;-Made some other readability improvements.&#10;-Added merge function (Not working fully).&#10;+After the merge, some tiles stay hanging." />
   </component>
 </project>

@@ -198,3 +198,51 @@ class GameGrid:
         stddraw.boldText((self.full_grid_width - self.grid_width)/2.6 + self.grid_width, self.grid_height - 2, str(self.score))
         # draw the next tetromino on information grid
         self.next_tetromino.draw()
+
+    # Method for merging the back to back tiles with same numbers
+    def merge(self, tetromino):
+        # recursion check variable
+        merged = False
+        # determine the merge width border
+        if tetromino.bottom_left_corner.x + tetromino.n > self.grid_width:
+            right_merge_border = self.grid_width
+        else:
+            right_merge_border = tetromino.bottom_left_corner.x + tetromino.n
+        # check in tetromino's column border
+        for col in range(tetromino.bottom_left_corner.y, tetromino.bottom_left_corner.y + tetromino.n):
+            # check in tetromino's width border
+            for row in range(tetromino.bottom_left_corner.x, right_merge_border):
+                # check if there are blocks on the controlled coordinates
+                if self.tile_matrix[col][row] is not None and self.tile_matrix[col - 1][row] is not None:
+                    # check if the tiles in same column have the same number
+                    if self.tile_matrix[col - 1][row].number == self.tile_matrix[col][row].number:
+                        # store the tiles initial color temporary
+                        temp_color = self.tile_matrix[col][row].background_color
+                        # change the merged tiles color to green
+                        self.tile_matrix[col - 1][row].background_color = Color(0, 255, 0)
+                        self.tile_matrix[col][row].background_color = Color(0, 255, 0)
+                        # display the green tiles
+                        self.display()
+                        # reverse the tile's color
+                        self.tile_matrix[col-1][row].background_color = temp_color
+                        # multiply the tile's number by 2
+                        self.tile_matrix[col-1][row].number *= 2
+                        # delete top tile
+                        self.tile_matrix[col][row] = None
+                        # check for hanging tiles on the merge column
+                        for i in range(col, self.current_tetromino.bottom_left_corner.y + self.current_tetromino.n):
+                            # check if there is a tile with a space under it
+                            if self.tile_matrix[i - 1][row] is None and self.tile_matrix[i][row] is not None:
+                                # move the tile down
+                                self.tile_matrix[i][row].move(0, -1)
+                                # move the tile down in matrix
+                                self.tile_matrix[i - 1][row] = self.tile_matrix[i][row]
+                                # delete the top tile
+                                self.tile_matrix[i][row] = None
+                        # change recursion variable to true
+                        merged = True
+                        # quit the loop
+                        break
+        # if a merge happened, call merge function again
+        if merged:
+            self.merge(tetromino)
