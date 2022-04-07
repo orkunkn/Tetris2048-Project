@@ -58,7 +58,6 @@ def start():
                 # move the tetromino down by one
                 # (causes the tetromino to fall down faster)
                 current_tetromino.move(key_typed, grid)
-                # current_tetromino.rotateTetromino(1, grid)
             # clear the queue that stores all the keys pressed/typed
             stddraw.clearKeysTyped()
 
@@ -75,7 +74,7 @@ def start():
             if game_over:
                 break
             # do the merge
-            current_tetromino.merge(grid)
+            grid.merge(current_tetromino)
             # create the next tetromino to enter the game grid
             # by using the create_tetromino function defined below
             # set the position of the next tetromino
