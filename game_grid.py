@@ -15,6 +15,8 @@ class GameGrid:
         self.grid_width = grid_w
         self.full_grid_height = full_grid_h
         self.full_grid_width = full_grid_w
+        self.score = 0
+
         # create the tile matrix to store the tiles placed on the game grid
         self.tile_matrix = np.full((grid_h, grid_w), None)
         # the tetromino that is currently being moved on the game grid
@@ -66,6 +68,46 @@ class GameGrid:
 
         self.score += score # update score
 
+
+    # method checks whether the rows are filled or empty.
+    # all rows and columns are checked
+    # deleted rows are filled
+    # adding the numbers there and adding them to the score.
+    def clearLines(self):
+        # variables where controls should be started and the limits set.
+        col = len(self.tile_matrix[0])
+        row = len(self.tile_matrix)
+        score = 0
+
+        # start from the bottom row
+        for r in range(row):
+            row_full = True
+            for c in range(col):
+                if self.tile_matrix[r][c] == None:
+                    row_full = False
+                    break
+            if row_full:
+                # addition of numbers
+                # delete a full line
+                for c in range(col):
+                    score += self.tile_matrix[r][c].number
+                    self.tile_matrix[r][c] = None
+
+                    # loops created to drop lines
+
+                    # if self.tile_matrix[r-1][c] is not None:
+                    #     self.tile_matrix[r-1][c].move(0, -1)
+                    # self.tile_matrix[r][c] = copy.deepcopy(self.tile_matrix[r-1][c])
+                    # self.tile_matrix[r-1][c] = None
+                # for NewR in range(r, 0, -1):  # start from the bottom row
+                #     print('a')
+                #     for NewC in range(col):
+                #         self.tile_matrix[NewR][NewC] = self.tile_matrix[NewR - 1][NewC]
+                #         if self.tile_matrix[NewR][NewC] is not None:
+                #             print('ran')
+                #             self.tile_matrix[NewR][NewC].move(0, -1)
+        # upgrade the score
+        self.score += score
 
     # Method for drawing the cells and the lines of the grid
     def draw_grid(self):
