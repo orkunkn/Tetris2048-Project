@@ -154,8 +154,8 @@ def setCanvasSize(w=_DEFAULT_CANVAS_SIZE, h=_DEFAULT_CANVAS_SIZE):
     global _canvasHeight
     global _windowCreated
 
-    if _windowCreated:
-        raise Exception('The stddraw window already was created')
+    # if _windowCreated:
+    #     raise Exception('The stddraw window already was created')
 
     if (w < 1) or (h < 1):
         raise Exception('width and height must be positive')
