@@ -8,7 +8,7 @@ from color import Color  # used for coloring the game grid
 class GameGrid:
     # Constructor for creating the game grid based on the given arguments
     def __init__(self, grid_h, grid_w, full_grid_h, full_grid_w):
-        self.score=0
+        self.score = 0
         # set the dimensions of the game grid as the given arguments
         self.speed = 250
         self.grid_height = grid_h
@@ -49,65 +49,29 @@ class GameGrid:
         self.draw_information_grid()
         # show the resulting drawing with a pause duration = 250 ms
         stddraw.show(self.speed)
+
     # method for clearing full lines
     def clearLines(self):
         col = len(self.tile_matrix[0])
         row = len(self.tile_matrix)
         score = 0
         for r in range(row):
-
             row_full = True
             for c in range(col):
-                if self.tile_matrix[r][c] == None: # break  at the sight of the first none on the row
+                if self.tile_matrix[r][c] is None:  # break  at the sight of the first none on the row
                     row_full = False
                     break
-            if row_full: # if there is no None in that row
+            if row_full:  # if there is no None in that row
                 for c in range(col):
-                    score += self.tile_matrix[r][c].number # sum up values for the score
-                    self.tile_matrix[r][c] = None # remove those tiles
+                    score += self.tile_matrix[r][c].number  # sum up values for the score
+                    self.tile_matrix[r][c] = None  # remove those tiles
+                    for i in range(r, row-1):
+                        if self.tile_matrix[i+1][c] is not None:
+                            self.tile_matrix[i + 1][c].move(0, -1)
+                            self.tile_matrix[i][c] = self.tile_matrix[i+1][c]
+                            self.tile_matrix[i + 1][c] = None
 
-        self.score += score # update score
-
-
-    # method checks whether the rows are filled or empty.
-    # all rows and columns are checked
-    # deleted rows are filled
-    # adding the numbers there and adding them to the score.
-    def clearLines(self):
-        # variables where controls should be started and the limits set.
-        col = len(self.tile_matrix[0])
-        row = len(self.tile_matrix)
-        score = 0
-
-        # start from the bottom row
-        for r in range(row):
-            row_full = True
-            for c in range(col):
-                if self.tile_matrix[r][c] == None:
-                    row_full = False
-                    break
-            if row_full:
-                # addition of numbers
-                # delete a full line
-                for c in range(col):
-                    score += self.tile_matrix[r][c].number
-                    self.tile_matrix[r][c] = None
-
-                    # loops created to drop lines
-
-                    # if self.tile_matrix[r-1][c] is not None:
-                    #     self.tile_matrix[r-1][c].move(0, -1)
-                    # self.tile_matrix[r][c] = copy.deepcopy(self.tile_matrix[r-1][c])
-                    # self.tile_matrix[r-1][c] = None
-                # for NewR in range(r, 0, -1):  # start from the bottom row
-                #     print('a')
-                #     for NewC in range(col):
-                #         self.tile_matrix[NewR][NewC] = self.tile_matrix[NewR - 1][NewC]
-                #         if self.tile_matrix[NewR][NewC] is not None:
-                #             print('ran')
-                #             self.tile_matrix[NewR][NewC].move(0, -1)
-        # upgrade the score
-        self.score += score
+        self.score += score  # update score
 
     # Method for drawing the cells and the lines of the grid
     def draw_grid(self):
@@ -192,10 +156,12 @@ class GameGrid:
         # print the information titles (SCORE and NEXT)
         stddraw.setPenColor(stddraw.BLACK)
         stddraw.setFontSize(self.grid_width * 2)
-        stddraw.boldText((self.full_grid_width - self.grid_width)/2.6 + self.grid_width, self.grid_height - 1, "SCORE")
-        stddraw.boldText((self.full_grid_width - self.grid_width)/2.6 + self.grid_width, 5, "NEXT")
+        stddraw.boldText((self.full_grid_width - self.grid_width) / 2.6 + self.grid_width, self.grid_height - 1,
+                         "SCORE")
+        stddraw.boldText((self.full_grid_width - self.grid_width) / 2.6 + self.grid_width, 5, "NEXT")
         # print the score
-        stddraw.boldText((self.full_grid_width - self.grid_width)/2.6 + self.grid_width, self.grid_height - 2, str(self.score))
+        stddraw.boldText((self.full_grid_width - self.grid_width) / 2.6 + self.grid_width, self.grid_height - 2,
+                         str(self.score))
         # draw the next tetromino on information grid
         self.next_tetromino.draw()
 
@@ -208,9 +174,14 @@ class GameGrid:
             right_merge_border = self.grid_width
         else:
             right_merge_border = tetromino.bottom_left_corner.x + tetromino.n
-        # check in tetromino's column border
-        for col in range(tetromino.bottom_left_corner.y, tetromino.bottom_left_corner.y + tetromino.n):
-            # check in tetromino's width border
+        # determine the merge height border
+        if tetromino.bottom_left_corner.y + tetromino.n > self.grid_height:
+            up_merge_border = self.grid_height
+        else:
+            up_merge_border = tetromino.bottom_left_corner.y + tetromino.n
+        # check in tetrominos height border
+        for col in range(tetromino.bottom_left_corner.y, up_merge_border):
+            # check in tetrominos width border
             for row in range(tetromino.bottom_left_corner.x, right_merge_border):
                 # check if there are blocks on the controlled coordinates
                 if self.tile_matrix[col][row] is not None and self.tile_matrix[col - 1][row] is not None:
@@ -224,13 +195,13 @@ class GameGrid:
                         # display the green tiles
                         self.display()
                         # reverse the tile's color
-                        self.tile_matrix[col-1][row].background_color = temp_color
+                        self.tile_matrix[col - 1][row].background_color = temp_color
                         # multiply the tile's number by 2
-                        self.tile_matrix[col-1][row].number *= 2
+                        self.tile_matrix[col - 1][row].number *= 2
                         # delete top tile
                         self.tile_matrix[col][row] = None
                         # check for hanging tiles on the merge column
-                        for i in range(col, self.current_tetromino.bottom_left_corner.y + self.current_tetromino.n):
+                        for i in range(col, up_merge_border):
                             # check if there is a tile with a space under it
                             if self.tile_matrix[i - 1][row] is None and self.tile_matrix[i][row] is not None:
                                 # move the tile down

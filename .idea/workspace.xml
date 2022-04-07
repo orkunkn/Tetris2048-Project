@@ -6,6 +6,7 @@
       <change beforePath="$PROJECT_DIR$/Tetris_2048.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tetris_2048.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game_grid.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_grid.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tetromino.py" beforeDir="false" afterPath="$PROJECT_DIR$/tetromino.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tile.py" beforeDir="false" afterPath="$PROJECT_DIR$/tile.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -150,7 +151,19 @@
         </entry>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="githubRepo/game_over_menu" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
