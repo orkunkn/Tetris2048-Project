@@ -198,6 +198,8 @@ class GameGrid:
                         self.tile_matrix[col - 1][row].background_color = temp_color
                         # multiply the tile's number by 2
                         self.tile_matrix[col - 1][row].number *= 2
+                        # add merged numbers to score
+                        self.score += self.tile_matrix[col - 1][row].number
                         # delete top tile
                         self.tile_matrix[col][row] = None
                         # check for hanging tiles on the merge column
