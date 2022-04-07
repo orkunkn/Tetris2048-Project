@@ -10,6 +10,7 @@ class GameGrid:
     def __init__(self, grid_h, grid_w, full_grid_h, full_grid_w):
         self.score=0
         # set the dimensions of the game grid as the given arguments
+        self.speed = 250
         self.grid_height = grid_h
         self.grid_width = grid_w
         self.full_grid_height = full_grid_h
@@ -45,9 +46,25 @@ class GameGrid:
         # draw the second grid for showing score and next tetromino
         self.draw_information_grid()
         # show the resulting drawing with a pause duration = 250 ms
-        stddraw.show(100)
+        stddraw.show(self.speed)
+    # method for clearing full lines
+    def clearLines(self):
+        col = len(self.tile_matrix[0])
+        row = len(self.tile_matrix)
+        score = 0
+        for r in range(row):
 
+            row_full = True
+            for c in range(col):
+                if self.tile_matrix[r][c] == None: # break  at the sight of the first none on the row
+                    row_full = False
+                    break
+            if row_full: # if there is no None in that row
+                for c in range(col):
+                    score += self.tile_matrix[r][c].number # sum up values for the score
+                    self.tile_matrix[r][c] = None # remove those tiles
 
+        self.score += score # update score
 
 
     # Method for drawing the cells and the lines of the grid
@@ -136,6 +153,6 @@ class GameGrid:
         stddraw.boldText((self.full_grid_width - self.grid_width)/2.6 + self.grid_width, self.grid_height - 1, "SCORE")
         stddraw.boldText((self.full_grid_width - self.grid_width)/2.6 + self.grid_width, 5, "NEXT")
         # print the score
-        #stddraw.boldText((self.full_grid_width - self.grid_width)/2.6 + self.grid_width, self.grid_height - 2, str(self.score))
+        stddraw.boldText((self.full_grid_width - self.grid_width)/2.6 + self.grid_width, self.grid_height - 2, str(self.score))
         # draw the next tetromino on information grid
         self.next_tetromino.draw()

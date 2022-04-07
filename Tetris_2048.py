@@ -39,9 +39,10 @@ def start():
 
     # display a simple menu before opening the game
     display_game_menu(full_grid_h, full_grid_w)
-
+    restart=False
+    pause = False
     # main game loop (keyboard interaction for moving the tetromino)
-    while True:
+    while True :
         # check user interactions via the keyboard
         if stddraw.hasNextKeyTyped():
             key_typed = stddraw.nextKeyTyped()
@@ -63,37 +64,42 @@ def start():
             elif (key_typed == "d"):
                 current_tetromino.rotateTetromino(1,grid)
             # clear the queue that stores all the keys pressed/typed
+            elif (key_typed == "escape"): # pressing escape pauses the game
+                pause = not pause
             stddraw.clearKeysTyped()
 
+        # do if the game is not paused
+        if not pause:
+            # move (drop) the tetromino down by 1 at each iteration
+            success = current_tetromino.move("down", grid)
 
-        # move (drop) the tetromino down by 1 at each iteration
-        success = current_tetromino.move("down", grid)
+            # place the tetromino on the game grid when it cannot go down anymore
+            if not success:
+                # get the tile matrix of the tetromino
+                tiles_to_place = current_tetromino.tile_matrix
 
-        # place the tetromino on the game grid when it cannot go down anymore
-        if not success:
-            # get the tile matrix of the tetromino
-            tiles_to_place = current_tetromino.tile_matrix
+                # update the game grid by adding the tiles of the tetromino
+                game_over = grid.update_grid(tiles_to_place)
+                grid.clearLines()
+                # current_tetromino.merge(grid)
+                # end the main game loop if the game is over
+                if game_over:
+                    break
+                # create the next tetromino to enter the game grid
+                # by using the create_tetromino function defined below
+                # set the position of the next tetromino
+                next_tetromino.position()
+                # change current tetromino to next tetromino
+                current_tetromino = next_tetromino
+                grid.current_tetromino = current_tetromino
+                # create next tetromino
+                next_tetromino = create_tetromino(grid_h, grid_w)
+                grid.next_tetromino = next_tetromino
 
-            # update the game grid by adding the tiles of the tetromino
-            game_over = grid.update_grid(tiles_to_place)
-            #grid.clearLines()
-            #current_tetromino.merge(grid)
-            # end the main game loop if the game is over
-            if game_over:
-                break
-            # create the next tetromino to enter the game grid
-            # by using the create_tetromino function defined below
-            # set the position of the next tetromino
-            next_tetromino.position()
-            # change current tetromino to next tetromino
-            current_tetromino = next_tetromino
-            grid.current_tetromino = current_tetromino
-            # create next tetromino
-            next_tetromino = create_tetromino(grid_h, grid_w)
-            grid.next_tetromino = next_tetromino
-
-        # display the game grid and as well the current tetromino
+            # display the game grid and as well the current tetromino
         grid.display()
+
+
 
     print("Game over")
 
