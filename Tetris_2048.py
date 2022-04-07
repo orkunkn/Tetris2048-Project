@@ -39,7 +39,7 @@ def start():
 
     # display a simple menu before opening the game
     display_game_menu(full_grid_h, full_grid_w)
-
+    restart = False
     end = True
     # main game loop (keyboard interaction for moving the tetromino)
     while end:
@@ -59,12 +59,24 @@ def start():
                 # move the tetromino down by one
                 # (causes the tetromino to fall down faster)
                 current_tetromino.move(key_typed, grid)
+            # if the r key has been pressed
+            elif key_typed == "r":
+                # game ends
+                # the game restarts
+                restart = True
             # clear the queue that stores all the keys pressed/typed
             stddraw.clearKeysTyped()
 
         # move (drop) the tetromino down by 1 at each iteration
         success = current_tetromino.move("down", grid)
 
+        # restarts the game
+        # calls the game over menu and displays the score
+        if restart:
+            game_over = True
+            # show game over menu
+            game_over_menu(full_grid_h,full_grid_w,str(grid.score))
+            break
         # place the tetromino on the game grid when it cannot go down anymore
         if not success:
             # get the tile matrix of the tetromino
@@ -89,9 +101,11 @@ def start():
 
         # display the game grid and as well the current tetromino
         grid.display()
+    # show the game over screen
     if end == False:
         print("Game over")
         game_over_menu(full_grid_h,full_grid_w,str(grid.score))
+
 # Function for creating random shaped tetrominoes to enter the game grid
 def create_tetromino(grid_height, grid_width):
     # type (shape) of the tetromino is determined randomly
@@ -148,6 +162,7 @@ def display_game_menu(full_grid_height, full_grid_width):
                     break  # break the loop to end the method and start the game
 
 
+# function of the menu that appears after the game is over
 def game_over_menu(full_grid_width, full_grid_height,score):
 
     # colors used for the menu
@@ -180,8 +195,10 @@ def game_over_menu(full_grid_width, full_grid_height,score):
     text_to_display = "Try Again"
     stddraw.text(img_center_x-0.5, 5, text_to_display)
 
+    # change the color score
     colorScore = Color(255, 255, 239)
     text = "Score"
+    # declare a score place
     stddraw.text(img_center_x - 0.5, 8.5, score)
     stddraw.setPenColor(colorScore)
     stddraw.text(img_center_x-0.5, 10.5, text)
@@ -196,6 +213,8 @@ def game_over_menu(full_grid_width, full_grid_height,score):
             mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
             if button_blc_x <= mouse_x <= button_blc_x + button_w:
                 if button_blc_y <= mouse_y <= button_blc_y + button_h:
+                    # used when the game ends
+                    # the user wants to play again
                     start()
                     break  # break the loop to end the method and start the game
 
