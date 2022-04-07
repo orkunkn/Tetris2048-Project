@@ -39,10 +39,10 @@ def start():
 
     # display a simple menu before opening the game
     display_game_menu(full_grid_h, full_grid_w)
-    restart=False
-    pause = False
+    restart = False
+    end = True
     # main game loop (keyboard interaction for moving the tetromino)
-    while True :
+    while end:
         # check user interactions via the keyboard
         if stddraw.hasNextKeyTyped():
             key_typed = stddraw.nextKeyTyped()
@@ -59,50 +59,52 @@ def start():
                 # move the tetromino down by one
                 # (causes the tetromino to fall down faster)
                 current_tetromino.move(key_typed, grid)
-            elif (key_typed == "a"):
-                current_tetromino.rotateTetromino(-1,grid)
-            elif (key_typed == "d"):
-                current_tetromino.rotateTetromino(1,grid)
+            # if the r key has been pressed
+            elif key_typed == "r":
+                # game ends
+                # the game restarts
+                restart = True
             # clear the queue that stores all the keys pressed/typed
-            elif (key_typed == "escape"): # pressing escape pauses the game
-                pause = not pause
             stddraw.clearKeysTyped()
 
-        # do if the game is not paused
-        if not pause:
-            # move (drop) the tetromino down by 1 at each iteration
-            success = current_tetromino.move("down", grid)
+        # move (drop) the tetromino down by 1 at each iteration
+        success = current_tetromino.move("down", grid)
 
-            # place the tetromino on the game grid when it cannot go down anymore
-            if not success:
-                # get the tile matrix of the tetromino
-                tiles_to_place = current_tetromino.tile_matrix
+        # restarts the game
+        # calls the game over menu and displays the score
+        if restart:
+            game_over = True
+            # show game over menu
+            game_over_menu(full_grid_h,full_grid_w,str(grid.score))
+            break
+        # place the tetromino on the game grid when it cannot go down anymore
+        if not success:
+            # get the tile matrix of the tetromino
+            tiles_to_place = current_tetromino.tile_matrix
+            # update the game grid by adding the tiles of the tetromino
+            game_over = grid.update_grid(tiles_to_place)
+            # end the main game loop if the game is over
+            if game_over:
+                end = False
+                break
+            grid.clearLines()
+            # create the next tetromino to enter the game grid
+            # by using the create_tetromino function defined below
+            # set the position of the next tetromino
+            next_tetromino.position()
+            # change current tetromino to next tetromino
+            current_tetromino = next_tetromino
+            grid.current_tetromino = current_tetromino
+            # create next tetromino
+            next_tetromino = create_tetromino(grid_h, grid_w)
+            grid.next_tetromino = next_tetromino
 
-                # update the game grid by adding the tiles of the tetromino
-                game_over = grid.update_grid(tiles_to_place)
-                grid.clearLines()
-                # current_tetromino.merge(grid)
-                # end the main game loop if the game is over
-                if game_over:
-                    break
-                # create the next tetromino to enter the game grid
-                # by using the create_tetromino function defined below
-                # set the position of the next tetromino
-                next_tetromino.position()
-                # change current tetromino to next tetromino
-                current_tetromino = next_tetromino
-                grid.current_tetromino = current_tetromino
-                # create next tetromino
-                next_tetromino = create_tetromino(grid_h, grid_w)
-                grid.next_tetromino = next_tetromino
-
-            # display the game grid and as well the current tetromino
+        # display the game grid and as well the current tetromino
         grid.display()
-
-
-
-    print("Game over")
-
+    # show the game over screen
+    if end == False:
+        print("Game over")
+        game_over_menu(full_grid_h,full_grid_w,str(grid.score))
 
 # Function for creating random shaped tetrominoes to enter the game grid
 def create_tetromino(grid_height, grid_width):
@@ -157,6 +159,63 @@ def display_game_menu(full_grid_height, full_grid_width):
             mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
             if button_blc_x <= mouse_x <= button_blc_x + button_w:
                 if button_blc_y <= mouse_y <= button_blc_y + button_h:
+                    break  # break the loop to end the method and start the game
+
+
+# function of the menu that appears after the game is over
+def game_over_menu(full_grid_width, full_grid_height,score):
+
+    # colors used for the menu
+    background_color = Color(25, 25, 112)
+    button_color = Color(25, 255, 228)
+    text_color = Color(31, 160, 239)
+    # clear the background canvas to background_color
+    stddraw.clear(background_color)
+    # get the directory in which this python code file is placed
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    # path of the image file
+    img_file = current_dir + "/game_over_1.png"
+    # center coordinates to display the image
+    img_center_x, img_center_y = (full_grid_width - 4) / 2, full_grid_height - 3
+    # image is represented using the Picture class
+    image_to_display = Picture(img_file)
+    # display the image
+    stddraw.picture(image_to_display, img_center_x-0.5, img_center_y+1)
+    # dimensions of the start game button
+    button_w, button_h = full_grid_width - 7.5, 2
+    # coordinates of the bottom left corner of the start game button
+    button_blc_x, button_blc_y = img_center_x - button_w / 1.9, 4
+    # display the start game button as a filled rectangle
+    stddraw.setPenColor(button_color)
+    stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
+    # display the text on the start game button
+    stddraw.setFontFamily("Arial")
+    stddraw.setFontSize(40)
+    stddraw.setPenColor(text_color)
+    text_to_display = "Try Again"
+    stddraw.text(img_center_x-0.5, 5, text_to_display)
+
+    # change the color score
+    colorScore = Color(255, 255, 239)
+    text = "Score"
+    # declare a score place
+    stddraw.text(img_center_x - 0.5, 8.5, score)
+    stddraw.setPenColor(colorScore)
+    stddraw.text(img_center_x-0.5, 10.5, text)
+
+    while True:
+        # display the menu and wait for a short time (50 ms)
+        stddraw.show(50)
+        # check if the mouse has been left-clicked
+        if stddraw.mousePressed():
+            # get the x and y coordinates of the location at which the mouse has
+            # most recently been left-clicked
+            mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
+            if button_blc_x <= mouse_x <= button_blc_x + button_w:
+                if button_blc_y <= mouse_y <= button_blc_y + button_h:
+                    # used when the game ends
+                    # the user wants to play again
+                    start()
                     break  # break the loop to end the method and start the game
 
 
