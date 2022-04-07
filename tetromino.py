@@ -113,8 +113,7 @@ class Tetromino:
             # vertical position of the tile
             position.y = self.bottom_left_corner.y + (self.n - 1) - row_index
             # create the tile on the computed position
-            self.tile_matrix[row_index][col_index] = Tile(position)
-
+            self.tile_matrix[row_index][col_index].set_position(position)
     # Method for drawing the tetromino on the game grid
     def draw(self):
         n = len(self.tile_matrix)  # n = number of rows = number of columns
@@ -142,6 +141,9 @@ class Tetromino:
         else:
             self.canRotate(grid,rotDir)
 
+    def drop(self, grid):
+        while(self.can_be_moved('down',grid)):
+            self.move('down',grid)
 
 
     # check if the upcoming rotation is valid

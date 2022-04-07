@@ -38,7 +38,8 @@ def start():
     grid.next_tetromino = next_tetromino
 
     # display a simple menu before opening the game
-    display_game_menu(full_grid_h, full_grid_w)
+    speed= display_game_menu(full_grid_h, full_grid_w)
+    grid.speed=speed
     restart=False
     pause = False
     # main game loop (keyboard interaction for moving the tetromino)
@@ -66,13 +67,27 @@ def start():
             # clear the queue that stores all the keys pressed/typed
             elif (key_typed == "escape"): # pressing escape pauses the game
                 pause = not pause
+
+            elif (key_typed == "space"): # pressing escape pauses the game
+
+                current_tetromino.drop(grid)
+            elif key_typed == "r":
+                # game ends
+                # the game restarts
+                restart = True
             stddraw.clearKeysTyped()
+
 
         # do if the game is not paused
         if not pause:
             # move (drop) the tetromino down by 1 at each iteration
             success = current_tetromino.move("down", grid)
 
+            if restart:
+                game_over = True
+                # show game over menu
+                game_over_menu(full_grid_h, full_grid_w, str(grid.score))
+                break
             # place the tetromino on the game grid when it cannot go down anymore
             if not success:
                 # get the tile matrix of the tetromino
@@ -80,10 +95,14 @@ def start():
 
                 # update the game grid by adding the tiles of the tetromino
                 game_over = grid.update_grid(tiles_to_place)
+                # do the merge
+                grid.merge(current_tetromino, pause)
+                # clear the full lines
                 grid.clearLines()
                 # current_tetromino.merge(grid)
                 # end the main game loop if the game is over
                 if game_over:
+                    game_over_menu(full_grid_h, full_grid_w, str(grid.score))
                     break
                 # create the next tetromino to enter the game grid
                 # by using the create_tetromino function defined below
@@ -97,7 +116,19 @@ def start():
                 grid.next_tetromino = next_tetromino
 
             # display the game grid and as well the current tetromino
-        grid.display()
+        if pause:
+            print('a')
+            current_dir = os.path.dirname(os.path.realpath(__file__))
+            # path of the image file
+            img_file = current_dir + "/menu_image.png"
+            # center coordinates to display the image
+            img_center_x, img_center_y = 5, 5
+            # image is represented using the Picture class
+            image_to_display = Picture(img_file)
+            # display the image
+            stddraw.picture(image_to_display, img_center_x, img_center_y)
+
+        grid.display(pause)
 
 
 
@@ -157,8 +188,109 @@ def display_game_menu(full_grid_height, full_grid_width):
             mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
             if button_blc_x <= mouse_x <= button_blc_x + button_w:
                 if button_blc_y <= mouse_y <= button_blc_y + button_h:
-                    break  # break the loop to end the method and start the game
+                    return difficultyMenu(full_grid_width,full_grid_height)
 
+def difficultyMenu(full_grid_width, full_grid_height):
+    # colors used for the menu
+    background_color = Color(42, 69, 99)
+    button_color = Color(25, 255, 228)
+    text_color = Color(31, 160, 239)
+    # clear the background canvas to background_color
+    stddraw.clear(background_color)
+    button_w, button_h = (full_grid_width - 1)/2, 2
+    # coordinates of the bottom left corner of the start game button
+    easy_x, easy_y = (full_grid_width - 1) / 4, 14
+    medium_y = 9
+    hard_y = 4
+    # display the start game button as a filled rectangle
+    stddraw.setPenColor(button_color)
+    stddraw.filledRectangle(easy_x, easy_y, button_w, button_h)
+    stddraw.filledRectangle(easy_x, medium_y, button_w, button_h)
+    stddraw.filledRectangle(easy_x, hard_y, button_w, button_h)
+    # display the text on the start game button
+    stddraw.setFontFamily("Arial")
+    stddraw.setFontSize(40)
+    stddraw.setPenColor(text_color)
+    text_to_display = "Easy"
+    stddraw.text((full_grid_width - 1) /2,15, text_to_display)
+    text_to_display = "Medium"
+    stddraw.text((full_grid_width - 1) / 2, 10, text_to_display)
+    text_to_display = "Hard"
+    stddraw.text((full_grid_width - 1) / 2, 5, text_to_display)
+    # menu interaction loop
+    while True:
+        # display the menu and wait for a short time (50 ms)
+        stddraw.show(50)
+        # check if the mouse has been left-clicked
+        if stddraw.mousePressed():
+            # get the x and y coordinates of the location at which the mouse has
+            # most recently been left-clicked
+            mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
+            if easy_x <= mouse_x <= easy_y + button_w:
+                if easy_y <= mouse_y <= easy_y + button_h:
+                    return 250 # easy mode value
+            if easy_x <= mouse_x <= medium_y + button_w:
+                if medium_y <= mouse_y <= medium_y + button_h:
+                    return 150
+                    break  # break the loop to end the method and start the game
+            if easy_x <= mouse_x <= hard_y + button_w:
+                if hard_y <= mouse_y <= hard_y + button_h:
+                    return 50
+                    break  # break the loop to end the method and start the game
+def game_over_menu(full_grid_width, full_grid_height,score):
+
+    # colors used for the menu
+    background_color = Color(25, 25, 112)
+    button_color = Color(25, 255, 228)
+    text_color = Color(31, 160, 239)
+    # clear the background canvas to background_color
+    stddraw.clear(background_color)
+    # get the directory in which this python code file is placed
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    # path of the image file
+    img_file = current_dir + "/game_over_1.png"
+    # center coordinates to display the image
+    img_center_x, img_center_y = (full_grid_width - 4) / 2, full_grid_height - 3
+    # image is represented using the Picture class
+    image_to_display = Picture(img_file)
+    # display the image
+    stddraw.picture(image_to_display, img_center_x-0.5, img_center_y+1)
+    # dimensions of the start game button
+    button_w, button_h = full_grid_width - 7.5, 2
+    # coordinates of the bottom left corner of the start game button
+    button_blc_x, button_blc_y = img_center_x - button_w / 1.9, 4
+    # display the start game button as a filled rectangle
+    stddraw.setPenColor(button_color)
+    stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
+    # display the text on the start game button
+    stddraw.setFontFamily("Arial")
+    stddraw.setFontSize(40)
+    stddraw.setPenColor(text_color)
+    text_to_display = "Try Again"
+    stddraw.text(img_center_x-0.5, 5, text_to_display)
+
+    # change the color score
+    colorScore = Color(255, 255, 239)
+    text = "Score"
+    # declare a score place
+    stddraw.text(img_center_x - 0.5, 8.5, score)
+    stddraw.setPenColor(colorScore)
+    stddraw.text(img_center_x-0.5, 10.5, text)
+
+    while True:
+        # display the menu and wait for a short time (50 ms)
+        stddraw.show(50)
+        # check if the mouse has been left-clicked
+        if stddraw.mousePressed():
+            # get the x and y coordinates of the location at which the mouse has
+            # most recently been left-clicked
+            mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
+            if button_blc_x <= mouse_x <= button_blc_x + button_w:
+                if button_blc_y <= mouse_y <= button_blc_y + button_h:
+                    # used when the game ends
+                    # the user wants to play again
+                    start()
+                    break  # break the loop to end the method and start the game
 
 # start() function is specified as the entry point (main function) from which
 # the program starts execution

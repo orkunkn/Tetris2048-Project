@@ -28,6 +28,17 @@ class Tile:
         # set the colors of the tile
         if (self.number == 2):
             self.background_color = Color(238, 228, 218)
+        else:
+            self.background_color = Color(236, 223, 190)
+
+        #self.background_color = Color(151, 178, 199)  # background (tile) color
+        self.foreground_color = Color(0, 100, 200)  # foreground (number) color
+        self.boundary_color = Color(0, 100, 200)  # boundary (box) color
+        # set the position of the tile as the given position
+        self.position = Point(position.x, position.y)
+    def updateTileColor(self):
+        if (self.number == 2):
+            self.background_color = Color(238, 228, 218)
         elif (self.number == 4):
             self.background_color = Color(236, 223, 190)
         elif (self.number == 8):
@@ -50,12 +61,6 @@ class Tile:
             self.background_color = Color(240, 196, 36)
         else:
             self.background_color = Color(62, 57, 51)
-        #self.background_color = Color(151, 178, 199)  # background (tile) color
-        self.foreground_color = Color(0, 100, 200)  # foreground (number) color
-        self.boundary_color = Color(0, 100, 200)  # boundary (box) color
-        # set the position of the tile as the given position
-        self.position = Point(position.x, position.y)
-
     # Setter method for the position of the tile
     def set_position(self, position):
         # set the position of the tile as the given position
