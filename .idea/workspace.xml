@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="417d869b-aa1f-4202-a19b-eefda2b2e401" name="Changes" comment="-Combined all branches.&#10;-Fixed clear lines falling.">
+    <list default="true" id="417d869b-aa1f-4202-a19b-eefda2b2e401" name="Changes" comment=".">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tetris_2048.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tetris_2048.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game_grid.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_grid.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tetromino.py" beforeDir="false" afterPath="$PROJECT_DIR$/tetromino.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tile.py" beforeDir="false" afterPath="$PROJECT_DIR$/tile.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,7 +114,21 @@
       <option name="project" value="LOCAL" />
       <updated>1649361371446</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="-Added score addition for merged tiles.">
+      <created>1649363832898</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1649363832898</updated>
+    </task>
+    <task id="LOCAL-00006" summary=".">
+      <created>1649415255633</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1649415255633</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -182,6 +200,8 @@
     <MESSAGE value="Added information grid and adjusted the start menu." />
     <MESSAGE value="-Fixed the bug where the next tetromino and current tetromino numbers were different.&#10;-Made some other readability improvements.&#10;-Added merge function (Not working fully).&#10;+After the merge, some tiles stay hanging." />
     <MESSAGE value="-Combined all branches.&#10;-Fixed clear lines falling." />
-    <option name="LAST_COMMIT_MESSAGE" value="-Combined all branches.&#10;-Fixed clear lines falling." />
+    <MESSAGE value="-Added score addition for merged tiles." />
+    <MESSAGE value="." />
+    <option name="LAST_COMMIT_MESSAGE" value="." />
   </component>
 </project>

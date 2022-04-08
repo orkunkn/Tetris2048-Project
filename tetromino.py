@@ -15,7 +15,7 @@ class Tetromino:
         self.type = type
         self.grid_height = grid_height
         self.grid_width = grid_width
-        self.full_grid_width = grid_width + grid_width/3
+        self.full_grid_width = grid_width + grid_width / 3
         # set the shape of the tetromino based on the given type
         occupied_tiles = []
         if type == 'I':
@@ -114,6 +114,7 @@ class Tetromino:
             position.y = self.bottom_left_corner.y + (self.n - 1) - row_index
             # create the tile on the computed position
             self.tile_matrix[row_index][col_index].set_position(position)
+
     # Method for drawing the tetromino on the game grid
     def draw(self):
         n = len(self.tile_matrix)  # n = number of rows = number of columns
@@ -126,71 +127,73 @@ class Tetromino:
                     position = self.tile_matrix[row][col].get_position()
                     if position.y < self.grid_height:
                         self.tile_matrix[row][col].draw()
+
     def rotateTetromino(self, rotDir, grid, key=0):
         n = len(self.tile_matrix)
-        if (key==1): #
-            center1=Point()
-            center1.x=self.bottom_left_corner.x+1
-            center1.y=self.bottom_left_corner.y+1
+        if key == 1:
+            center1 = Point()
+            center1.x = self.bottom_left_corner.x + 1
+            center1.y = self.bottom_left_corner.y + 1
             for row in range(n):
                 for col in range(n):
-                    tile =self.tile_matrix[row][col]
+                    tile = self.tile_matrix[row][col]
                     if tile is not None:
                         tile.rotateTile(center1, rotDir)
             self.rotateTileMatrix(rotDir)
         else:
-            self.canRotate(grid,rotDir)
+            self.canRotate(grid, rotDir)
 
     def drop(self, grid):
-        while(self.can_be_moved('down',grid)):
-            self.move('down',grid)
-
+        while self.can_be_moved('down', grid):
+            self.move('down', grid)
 
     # check if the upcoming rotation is valid
     def canRotate(self, game_grid, rotDir):
-        type = self.type # needed for type specific actions
-        self.rotateTetromino(rotDir,game_grid,1) # tetromino is rotated with key=1 this means it is rotated without checking collision
+        # tetromino is rotated with key=1 this means it is rotated without checking collision
+        self.rotateTetromino(rotDir, game_grid, 1)
         n = len(self.tile_matrix)
         # for each tile collision or being out of bounds is tested on the rotated tetromino
-        # if any test fails tetromino is reverted back and method returns false
+        # if any test fails tetromino is reverted and method returns false
         for row in range(n):
             for col in range(n):
-                if(self.tile_matrix[row][col]==None):
+                if self.tile_matrix[row][col] is None:
                     break
-                currTile=self.tile_matrix[row][col].get_position()
-                if(currTile.x<0):
-                    self.rotateTetromino(rotDir*-1,game_grid,1)
+                currTile = self.tile_matrix[row][col].get_position()
+                if currTile.x < 0:
+                    self.rotateTetromino(rotDir * -1, game_grid, 1)
                     return False
                 # S and Z has a special case so their controls are done separately
-                if(currTile.x> self.grid_width-1 ) and (not(type== 'S' or type =='Z')):
-                    self.rotateTetromino(rotDir*-1,game_grid,1)
+                if (currTile.x > self.grid_width - 1) and (not (self.type == 'S' or self.type == 'Z')):
+                    self.rotateTetromino(rotDir * -1, game_grid, 1)
                     return False
-                if (type == 'S' or type == 'Z') and (currTile.x >= self.grid_width-1 ):
-                    self.rotateTetromino(rotDir*-1,game_grid,1)
+                if (self.type == 'S' or self.type == 'Z') and (currTile.x >= self.grid_width - 1):
+                    self.rotateTetromino(rotDir * -1, game_grid, 1)
                     return False
 
-                if (currTile.y < 0):
-                    self.rotateTetromino(rotDir*-1,game_grid,1)
+                if currTile.y < 0:
+                    self.rotateTetromino(rotDir * -1, game_grid, 1)
                     return False
-                if (game_grid.is_occupied(currTile.y,currTile.x)):
-                    self.rotateTetromino(rotDir*-1,game_grid,1)
+                if game_grid.is_occupied(currTile.y, currTile.x):
+                    self.rotateTetromino(rotDir * -1, game_grid, 1)
                     return False
         # if it passes all controls it remains rotated and methods returns true
         return True
+
     # many operations depend on the tile locations on the matrix so this method is needed
-    def rotateTileMatrix(self, rotDir): # method for rotating locations of the tiles in the tile matrix
+    def rotateTileMatrix(self, rotDir):  # method for rotating locations of the tiles in the tile matrix
         # a simple array rotation algorithm is used
         R, C = len(self.tile_matrix), len(self.tile_matrix[0])
         newArr = np.full((C, R), None)
-        if(rotDir==-1):
+        if rotDir == -1:
             for c in range(C):
-                for r in range(R-1,-1,-1):
-                    newArr[C-c-1][r] = self.tile_matrix[r][c]
+                for r in range(R - 1, -1, -1):
+                    newArr[C - c - 1][r] = self.tile_matrix[r][c]
         else:
             for c in range(C):
-                for r in range(R-1,-1,-1):
-                    newArr[c][R-r-1] = self.tile_matrix[r][c]
-        self.tile_matrix=newArr
+                for r in range(R - 1, -1, -1):
+                    newArr[c][R - r - 1] = self.tile_matrix[r][c]
+        self.tile_matrix = newArr
+
     # Method for moving the tetromino in a given direction by 1 on the game grid
     def move(self, direction, game_grid):
         # check if the tetromino can be moved in the given direction by using the
@@ -271,4 +274,3 @@ class Tetromino:
                             return False
                         break  # end the inner for loop
         return True  # tetromino can be moved in the given direction
-
