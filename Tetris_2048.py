@@ -152,15 +152,20 @@ def display_game_menu(full_grid_height, full_grid_width):
     button_w, button_h = full_grid_width - 1.5, 2
     # coordinates of the bottom left corner of the start game button
     button_blc_x, button_blc_y = img_center_x - button_w / 2, 4
+    ht_x = button_blc_x
+    ht_y = 1
     # display the start game button as a filled rectangle
     stddraw.setPenColor(button_color)
     stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
+    stddraw.filledRectangle(ht_x, ht_y, button_w, button_h)
     # display the text on the start game button
     stddraw.setFontFamily("Arial")
     stddraw.setFontSize(40)
     stddraw.setPenColor(text_color)
     text_to_display = "Start"
     stddraw.text(img_center_x, 5, text_to_display)
+    text_to_display = "How To Play"
+    stddraw.text(img_center_x, 2, text_to_display)
     # menu interaction loop
     while True:
         # display the menu and wait for a short time (50 ms)
@@ -173,7 +178,48 @@ def display_game_menu(full_grid_height, full_grid_width):
             if button_blc_x <= mouse_x <= button_blc_x + button_w:
                 if button_blc_y <= mouse_y <= button_blc_y + button_h:
                     return difficultyMenu(full_grid_width)
+            if ht_x <= mouse_x <= ht_x + button_w:
+                    if ht_y <= mouse_y <= ht_y + button_h:
+                        howToMenu(full_grid_width, full_grid_height)
 
+def howToMenu(full_grid_width, full_grid_height):
+    background_color = Color(42, 69, 99)
+    button_color = Color(25, 255, 228)
+    text_color = Color(31, 160, 239)
+    # clear the background canvas to background_color
+    stddraw.clear(background_color)
+    button_w, button_h = (full_grid_width - 1) / 2, 2
+    # coordinates of the bottom left corner of the start game button
+    bt_x, bt_y = (full_grid_width - 1) / 4, 14
+    stddraw.setPenColor(button_color)
+    stddraw.filledRectangle(bt_x, bt_y, button_w, button_h)
+    stddraw.setFontFamily("Arial")
+    stddraw.setFontSize(40)
+    stddraw.setPenColor(text_color)
+    text_to_display = "Main Menu"
+    stddraw.text((full_grid_width - 1) / 2, 15, text_to_display)
+    text_to_display = "Move Piece : Arrow Keys"
+    stddraw.text((full_grid_width - 1) / 2, 13, text_to_display)
+    text_to_display = "Rotate Piece : A and D Keys"
+    stddraw.text((full_grid_width - 1) / 2, 11, text_to_display)
+    text_to_display = "Drop Piece : Spacebar"
+    stddraw.text((full_grid_width - 1) / 2, 9, text_to_display)
+    text_to_display = "Pause Game : Escape"
+    stddraw.text((full_grid_width - 1) / 2, 7, text_to_display)
+    text_to_display = "Restart Game : R key"
+    stddraw.text((full_grid_width - 1) / 2, 5, text_to_display)
+    while True:
+        # display the menu and wait for a short time (50 ms)
+        stddraw.show(50)
+        # check if the mouse has been left-clicked
+        if stddraw.mousePressed():
+            # get the x and y coordinates of the location at which the mouse has
+            # most recently been left-clicked
+            mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
+            if bt_x <= mouse_x <= bt_y + button_w:
+                if bt_y <= mouse_y <= bt_y + button_h:
+                    start()
+                    break
 
 def difficultyMenu(full_grid_width):
     # colors used for the menu
