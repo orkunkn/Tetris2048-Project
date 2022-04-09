@@ -1,5 +1,5 @@
 import random  # each tetromino is created with a random x value above the grid
-
+from color import Color
 import numpy as np  # fundamental Python module for scientific computing
 
 from point import Point  # used for tile positions
@@ -127,23 +127,61 @@ class Tetromino:
                     position = self.tile_matrix[row][col].get_position()
                     if position.y < self.grid_height:
                         self.tile_matrix[row][col].draw()
-
+    # method for rotation
     def rotateTetromino(self, rotDir, grid, key=0):
         n = len(self.tile_matrix)
-        if key == 1:
-            center1 = Point()
-            center1.x = self.bottom_left_corner.x + 1
-            center1.y = self.bottom_left_corner.y + 1
-            for row in range(n):
-                for col in range(n):
-                    tile = self.tile_matrix[row][col]
-                    if tile is not None:
-                        tile.rotateTile(center1, rotDir)
-            self.rotateTileMatrix(rotDir)
+        # if tetromino type is O invoke specific function
+        if self.type == 'O':
+           self.rotate_O_piece(rotDir)
+           return True
         else:
-            self.canRotate(grid, rotDir)
+            if key == 1:  # if used with key == 1 rotated without checking collision
+                center1 = Point()
+                center1.x = self.bottom_left_corner.x + 1
+                center1.y = self.bottom_left_corner.y + 1
+                for row in range(n):
+                    for col in range(n):
+                        tile = self.tile_matrix[row][col]
+                        if tile is not None:
+                            tile.rotateTile(center1, rotDir)
+                # code above rotates tile but their location on the tile matrix needs to be rotated too
+                self.rotateTileMatrix(rotDir)
+            else:
+                # if invoked without the key == 1 code checks for collision
+                self.canRotate(grid, rotDir)
 
-    def drop(self, grid):
+    # a specific method for o piece rotation that only rotates numbers and colors around the piece and not tile objects
+    def rotate_O_piece(self,rotDir):
+        n = len(self.tile_matrix)
+        colors = {2: Color(238, 228, 218), 4: Color(236, 223, 190)} # dictionary for tile colors
+        numbers = [] # array for storing number values
+        newArr = np.full((n, n), None) # array for storing rotated numbers
+        # nested loop for collecting numbers from tile matrix
+        for r in range(n):
+            temp_row = []
+            for c in range(n):
+                temp_row.append(self.tile_matrix[r][c].number)
+            numbers.append(temp_row)
+        # if else block for rotating the collected numbers, similar to rotate tile matrix function
+        if rotDir == -1:
+            for c in range(n):
+                for r in range(n - 1, -1, -1):
+                    newArr[n - c - 1][r] = numbers[r][c]
+        else:
+            for c in range(n):
+                for r in range(n - 1, -1, -1):
+                    newArr[c][n - r - 1] = numbers[r][c]
+        # nested loop for replacing the original numbers and colors with the rotated ones
+        for r in range(n):
+            for c in range(n):
+                self.tile_matrix[r][c].number = newArr[r][c]
+                if newArr[r][c] == 2:
+                    self.tile_matrix[r][c].background_color = colors[2]
+                else:
+                    self.tile_matrix[r][c].background_color = colors[4]
+        return True
+
+    def drop(self, grid): # a simple method for dropping the piece instantly
         while self.can_be_moved('down', grid):
             self.move('down', grid)
 

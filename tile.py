@@ -35,7 +35,7 @@ class Tile:
         self.boundary_color = Color(0, 100, 200)  # boundary (box) color
         # set the position of the tile as the given position
         self.position = Point(position.x, position.y)
-
+    # mehtod for updating tile colors after each merge
     def updateTileColor(self):
         if self.number == 2:
             self.background_color = Color(238, 228, 218)
@@ -72,15 +72,18 @@ class Tile:
         # return the position of the tile
         return cp.copy(self.position)
 
-    # Rotate method for tile
+    # Rotate method for tiles
     def rotateTile(self, centerCoord, rotDir):  # 1 for right -1 for left
         relativeCoord = []
+        #rotation arrays
         clockwiseArr = np.array([[0, 1], [-1, 0]])
         counterClockwiseArrr = np.array([[0, -1], [1, 0]])
         relativeCoord.append(self.position.x - centerCoord.x)
         relativeCoord.append(self.position.y - centerCoord.y)
         if rotDir == 1:
+            # dot product is the new relative coordinates array
             newCoord = np.dot(clockwiseArr, relativeCoord)
+            # to get from relative coordinates to new coordinates, coordinates of the axis are added
             self.position.x = newCoord[0] + centerCoord.x
             self.position.y = newCoord[1] + centerCoord.y
         else:

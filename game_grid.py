@@ -88,7 +88,7 @@ class GameGrid:
                             self.tile_matrix[i + 1][c] = None
 
         self.score += score  # update score
-
+    # method for updating grid colors after each merge
     def updateGridColor(self):
         row = len(self.tile_matrix)
         col = len(self.tile_matrix[0])

@@ -67,7 +67,7 @@ def start():
             elif key_typed == "escape":  # pressing escape pauses the game
                 grid.pause = not grid.pause
 
-            elif key_typed == "space":  # pressing escape drops the piece
+            elif key_typed == "space":  # pressing space drops the piece
                 current_tetromino.drop(grid)
 
             elif key_typed == "r":
@@ -180,9 +180,9 @@ def display_game_menu(full_grid_height, full_grid_width):
                     return difficultyMenu(full_grid_width)
             if ht_x <= mouse_x <= ht_x + button_w:
                     if ht_y <= mouse_y <= ht_y + button_h:
-                        howToMenu(full_grid_width, full_grid_height)
-
-def howToMenu(full_grid_width, full_grid_height):
+                        howToMenu(full_grid_width)
+# method for displaying how to play menu
+def howToMenu(full_grid_width):
     background_color = Color(42, 69, 99)
     button_color = Color(25, 255, 228)
     text_color = Color(31, 160, 239)
@@ -220,7 +220,7 @@ def howToMenu(full_grid_width, full_grid_height):
                 if bt_y <= mouse_y <= bt_y + button_h:
                     start()
                     break
-
+# method for displaying difficulty menu
 def difficultyMenu(full_grid_width):
     # colors used for the menu
     background_color = Color(42, 69, 99)
@@ -269,7 +269,7 @@ def difficultyMenu(full_grid_width):
                 if hard_y <= mouse_y <= hard_y + button_h:
                     return 50
 
-
+# method for displaying game over menu
 def game_over_menu(full_grid_width, full_grid_height, score):
     # colors used for the menu
     background_color = Color(25, 25, 112)
