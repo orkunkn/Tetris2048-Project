@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="417d869b-aa1f-4202-a19b-eefda2b2e401" name="Changes" comment=".">
+    <list default="true" id="417d869b-aa1f-4202-a19b-eefda2b2e401" name="Changes" comment="-Added remove gaps function for single tiles.&#10;-Some fixes and optimizations.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Tetris_2048.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tetris_2048.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game_grid.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_grid.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu_image.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tetromino.py" beforeDir="false" afterPath="$PROJECT_DIR$/tetromino.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tile.py" beforeDir="false" afterPath="$PROJECT_DIR$/tile.py" afterDir="false" />
     </list>
@@ -48,7 +49,33 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="configurable.group.build" />
   </component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\orkun\PycharmProjects\Tetris2048-Project2" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.Tetris_2048">
+    <configuration name="Tetris_2048 (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Tetris2048-Project2" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Desktop/Tetris_2048_Base_Code" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$USER_HOME$/Desktop/Tetris_2048_Base_Code/Tetris_2048.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Tetris_2048" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Tetris2048-Project2" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -73,6 +100,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.Tetris_2048" />
+        <item itemvalue="Python.Tetris_2048 (1)" />
         <item itemvalue="Python.Tetris_2048" />
       </list>
     </recent_temporary>
@@ -128,7 +156,14 @@
       <option name="project" value="LOCAL" />
       <updated>1649415255633</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="-Added remove gaps function for single tiles.&#10;-Some fixes and optimizations.">
+      <created>1649448953285</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1649448953285</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -178,7 +213,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="githubRepo/game_over_menu" />
+                        <option value="master" />
                       </list>
                     </value>
                   </entry>
@@ -202,6 +237,7 @@
     <MESSAGE value="-Combined all branches.&#10;-Fixed clear lines falling." />
     <MESSAGE value="-Added score addition for merged tiles." />
     <MESSAGE value="." />
-    <option name="LAST_COMMIT_MESSAGE" value="." />
+    <MESSAGE value="-Added remove gaps function for single tiles.&#10;-Some fixes and optimizations." />
+    <option name="LAST_COMMIT_MESSAGE" value="-Added remove gaps function for single tiles.&#10;-Some fixes and optimizations." />
   </component>
 </project>

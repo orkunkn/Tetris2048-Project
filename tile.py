@@ -13,7 +13,7 @@ class Tile:
     # Class attributes shared among all Tile objects
     # ---------------------------------------------------------------------------
     # value used for the thickness of the boxes (boundaries) around the tiles
-    boundary_thickness = 0.004
+    boundary_thickness = 0.003
     # font family and size used for displaying the tile number
     font_family, font_size = "Arial", 14
 
@@ -31,18 +31,25 @@ class Tile:
         else:
             self.background_color = Color(236, 223, 190)
 
-        self.foreground_color = Color(0, 100, 200)  # foreground (number) color
-        self.boundary_color = Color(0, 100, 200)  # boundary (box) color
+        self.foreground_color = Color(64, 64, 64)  # foreground (number) color
+        self.boundary_color = Color(128, 128, 128)  # boundary (box) color
         # set the position of the tile as the given position
         self.position = Point(position.x, position.y)
-    # mehtod for updating tile colors after each merge
+
+    # method for updating tile colors after each merge
     def updateTileColor(self):
+        # check for numbers color
+        if self.number >= 8:
+            self.foreground_color = Color(255, 255, 255)
+        else:
+            self.foreground_color = Color(64, 64, 64)
+        # check for tile background colors
         if self.number == 2:
             self.background_color = Color(238, 228, 218)
         elif self.number == 4:
             self.background_color = Color(236, 223, 190)
         elif self.number == 8:
-            self.background_color = Color(243, 176, 121)
+            self.background_color = Color(242, 177, 121)
         elif self.number == 16:
             self.background_color = Color(246, 149, 98)
         elif self.number == 32:
@@ -75,7 +82,7 @@ class Tile:
     # Rotate method for tiles
     def rotateTile(self, centerCoord, rotDir):  # 1 for right -1 for left
         relativeCoord = []
-        #rotation arrays
+        # rotation arrays
         clockwiseArr = np.array([[0, 1], [-1, 0]])
         counterClockwiseArrr = np.array([[0, -1], [1, 0]])
         relativeCoord.append(self.position.x - centerCoord.x)

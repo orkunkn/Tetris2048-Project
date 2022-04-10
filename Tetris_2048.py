@@ -37,9 +37,11 @@ def start():
     next_tetromino = create_tetromino(grid_h, grid_w)
     grid.next_tetromino = next_tetromino
 
-    # display a simple menu before opening the game
+    # display a simple menu before opening the game and determine the game speed
     speed = display_game_menu(full_grid_h, full_grid_w)
     grid.speed = speed
+    # clear the buttons typed at game menu
+    stddraw.clearKeysTyped()
     restart = False
     # main game loop (keyboard interaction for moving the tetromino)
     while True:
@@ -114,7 +116,7 @@ def start():
                 grid.next_tetromino = next_tetromino
 
         # display the game grid and as well the current tetromino
-        grid.display(speed)
+        grid.display()
 
     print("Game over")
 
@@ -133,15 +135,15 @@ def create_tetromino(grid_height, grid_width):
 # Function for displaying a simple menu before starting the game
 def display_game_menu(full_grid_height, full_grid_width):
     # colors used for the menu
-    background_color = Color(42, 69, 99)
-    button_color = Color(25, 255, 228)
-    text_color = Color(31, 160, 239)
+    background_color = Color(160, 160, 160)
+    button_color = Color(255, 200, 25)
+    text_color = Color(64, 64, 64)
     # clear the background canvas to background_color
     stddraw.clear(background_color)
     # get the directory in which this python code file is placed
     current_dir = os.path.dirname(os.path.realpath(__file__))
     # path of the image file
-    img_file = current_dir + "/menu_image.png"
+    img_file = current_dir + "/menu_image_1.png"
     # center coordinates to display the image
     img_center_x, img_center_y = (full_grid_width - 1) / 2, full_grid_height - 7
     # image is represented using the Picture class
@@ -179,25 +181,26 @@ def display_game_menu(full_grid_height, full_grid_width):
                 if button_blc_y <= mouse_y <= button_blc_y + button_h:
                     return difficultyMenu(full_grid_width)
             if ht_x <= mouse_x <= ht_x + button_w:
-                    if ht_y <= mouse_y <= ht_y + button_h:
-                        howToMenu(full_grid_width)
+                if ht_y <= mouse_y <= ht_y + button_h:
+                    howToMenu(full_grid_width)
+
 # method for displaying how to play menu
 def howToMenu(full_grid_width):
-    background_color = Color(42, 69, 99)
-    button_color = Color(25, 255, 228)
-    text_color = Color(31, 160, 239)
+    background_color = Color(160, 160, 160)
+    button_color = Color(255, 200, 25)
+    text_color = Color(64, 64, 64)
     # clear the background canvas to background_color
     stddraw.clear(background_color)
     button_w, button_h = (full_grid_width - 1) / 2, 2
     # coordinates of the bottom left corner of the start game button
-    bt_x, bt_y = (full_grid_width - 1) / 4, 14
+    bt_x, bt_y = (full_grid_width - 1) / 4, 16
     stddraw.setPenColor(button_color)
     stddraw.filledRectangle(bt_x, bt_y, button_w, button_h)
     stddraw.setFontFamily("Arial")
     stddraw.setFontSize(40)
     stddraw.setPenColor(text_color)
     text_to_display = "Main Menu"
-    stddraw.text((full_grid_width - 1) / 2, 15, text_to_display)
+    stddraw.text((full_grid_width - 1) / 2, 17, text_to_display)
     text_to_display = "Move Piece : Arrow Keys"
     stddraw.text((full_grid_width - 1) / 2, 13, text_to_display)
     text_to_display = "Rotate Piece : A and D Keys"
@@ -220,24 +223,27 @@ def howToMenu(full_grid_width):
                 if bt_y <= mouse_y <= bt_y + button_h:
                     start()
                     break
-# method for displaying difficulty menu
+
+
 def difficultyMenu(full_grid_width):
     # colors used for the menu
-    background_color = Color(42, 69, 99)
-    button_color = Color(25, 255, 228)
-    text_color = Color(31, 160, 239)
+    background_color = Color(160, 160, 160)
+    button_color = Color(255, 200, 25)
+    text_color = Color(64, 64, 64)
     # clear the background canvas to background_color
     stddraw.clear(background_color)
     button_w, button_h = (full_grid_width - 1) / 2, 2
     # coordinates of the bottom left corner of the difficulty buttons
-    easy_x, easy_y = (full_grid_width - 1) / 4, 13
-    medium_y = 8
-    hard_y = 3
+    easy_x, easy_y = (full_grid_width - 1) / 4, 14
+    medium_y = 9
+    hard_y = 4
+    menu_x, menu_y = (full_grid_width - 1) / 3, 0.25
     # display the difficulty buttons as a filled rectangle
     stddraw.setPenColor(button_color)
     stddraw.filledRectangle(easy_x, easy_y, button_w, button_h)
     stddraw.filledRectangle(easy_x, medium_y, button_w, button_h)
     stddraw.filledRectangle(easy_x, hard_y, button_w, button_h)
+    stddraw.filledRectangle(menu_x, menu_y, button_w - 2.5, button_h-0.5)
     # display the texts on buttons
     stddraw.setFontFamily("Arial")
     stddraw.setFontSize(40)
@@ -245,11 +251,14 @@ def difficultyMenu(full_grid_width):
     text_to_display = "Select Difficulty"
     stddraw.text((full_grid_width - 1) / 2, 18, text_to_display)
     text_to_display = "Easy"
-    stddraw.text((full_grid_width - 1) / 2, 14, text_to_display)
+    stddraw.text((full_grid_width - 1) / 2, easy_y + 1, text_to_display)
     text_to_display = "Medium"
-    stddraw.text((full_grid_width - 1) / 2, 9, text_to_display)
+    stddraw.text((full_grid_width - 1) / 2, medium_y + 1, text_to_display)
     text_to_display = "Hard"
-    stddraw.text((full_grid_width - 1) / 2, 4, text_to_display)
+    stddraw.text((full_grid_width - 1) / 2, hard_y + 1, text_to_display)
+    stddraw.setFontSize(30)
+    text_to_display = "Main Menu"
+    stddraw.text((full_grid_width - 1) / 2, 1, text_to_display)
     # menu interaction loop
     while True:
         # display the menu and wait for a short time (50 ms)
@@ -268,13 +277,17 @@ def difficultyMenu(full_grid_width):
             if easy_x <= mouse_x <= hard_y + button_w:
                 if hard_y <= mouse_y <= hard_y + button_h:
                     return 50
+            if menu_x <= mouse_x <= menu_y + button_w + 2.25:
+                if menu_y <= mouse_y <= menu_y + button_h - 0.5:
+                    start()
+                    break
 
-# method for displaying game over menu
+
 def game_over_menu(full_grid_width, full_grid_height, score):
     # colors used for the menu
-    background_color = Color(25, 25, 112)
-    button_color = Color(25, 255, 228)
-    text_color = Color(31, 160, 239)
+    background_color = Color(160, 160, 160)
+    button_color = Color(255, 200, 25)
+    text_color = Color(64, 64, 64)
     # clear the background canvas to background_color
     stddraw.clear(background_color)
     # get the directory in which this python code file is placed

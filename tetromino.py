@@ -127,13 +127,14 @@ class Tetromino:
                     position = self.tile_matrix[row][col].get_position()
                     if position.y < self.grid_height:
                         self.tile_matrix[row][col].draw()
+
     # method for rotation
     def rotateTetromino(self, rotDir, grid, key=0):
         n = len(self.tile_matrix)
         # if tetromino type is O invoke specific function
         if self.type == 'O':
-           self.rotate_O_piece(rotDir)
-           return True
+            self.rotate_O_piece(rotDir)
+            return True
         else:
             if key == 1:  # if used with key == 1 rotated without checking collision
                 center1 = Point()
@@ -151,11 +152,11 @@ class Tetromino:
                 self.canRotate(grid, rotDir)
 
     # a specific method for o piece rotation that only rotates numbers and colors around the piece and not tile objects
-    def rotate_O_piece(self,rotDir):
+    def rotate_O_piece(self, rotDir):
         n = len(self.tile_matrix)
-        colors = {2: Color(238, 228, 218), 4: Color(236, 223, 190)} # dictionary for tile colors
-        numbers = [] # array for storing number values
-        newArr = np.full((n, n), None) # array for storing rotated numbers
+        colors = {2: Color(238, 228, 218), 4: Color(236, 223, 190)}  # dictionary for tile colors
+        numbers = []  # array for storing number values
+        newArr = np.full((n, n), None)  # array for storing rotated numbers
         # nested loop for collecting numbers from tile matrix
         for r in range(n):
             temp_row = []
@@ -181,7 +182,7 @@ class Tetromino:
                     self.tile_matrix[r][c].background_color = colors[4]
         return True
 
-    def drop(self, grid): # a simple method for dropping the piece instantly
+    def drop(self, grid):  # a simple method for dropping the piece instantly
         while self.can_be_moved('down', grid):
             self.move('down', grid)
 
