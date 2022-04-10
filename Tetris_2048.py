@@ -196,11 +196,14 @@ def howToMenu(full_grid_width):
     bt_x, bt_y = (full_grid_width - 1) / 4, 16
     stddraw.setPenColor(button_color)
     stddraw.filledRectangle(bt_x, bt_y, button_w, button_h)
+    stddraw.setPenColor(Color(64, 64, 64))
+    stddraw.filledRectangle(1.5, 3, 12, 12)
     stddraw.setFontFamily("Arial")
     stddraw.setFontSize(40)
     stddraw.setPenColor(text_color)
     text_to_display = "Main Menu"
     stddraw.text((full_grid_width - 1) / 2, 17, text_to_display)
+    stddraw.setPenColor(Color(255, 255, 255))
     text_to_display = "Move Piece : Arrow Keys"
     stddraw.text((full_grid_width - 1) / 2, 13, text_to_display)
     text_to_display = "Rotate Piece : A and D Keys"
@@ -219,7 +222,7 @@ def howToMenu(full_grid_width):
             # get the x and y coordinates of the location at which the mouse has
             # most recently been left-clicked
             mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
-            if bt_x <= mouse_x <= bt_y + button_w:
+            if bt_x <= mouse_x <= bt_x + button_w:
                 if bt_y <= mouse_y <= bt_y + button_h:
                     start()
                     break
@@ -238,12 +241,13 @@ def difficultyMenu(full_grid_width):
     medium_y = 9
     hard_y = 4
     menu_x, menu_y = (full_grid_width - 1) / 3, 0.25
+    menu_w, menu_h = button_w - 2.5, button_h-0.5
     # display the difficulty buttons as a filled rectangle
     stddraw.setPenColor(button_color)
     stddraw.filledRectangle(easy_x, easy_y, button_w, button_h)
     stddraw.filledRectangle(easy_x, medium_y, button_w, button_h)
     stddraw.filledRectangle(easy_x, hard_y, button_w, button_h)
-    stddraw.filledRectangle(menu_x, menu_y, button_w - 2.5, button_h-0.5)
+    stddraw.filledRectangle(menu_x, menu_y,menu_w, menu_h)
     # display the texts on buttons
     stddraw.setFontFamily("Arial")
     stddraw.setFontSize(40)
@@ -258,7 +262,7 @@ def difficultyMenu(full_grid_width):
     stddraw.text((full_grid_width - 1) / 2, hard_y + 1, text_to_display)
     stddraw.setFontSize(30)
     text_to_display = "Main Menu"
-    stddraw.text((full_grid_width - 1) / 2, 1, text_to_display)
+    stddraw.text(menu_x+2.5, menu_y+0.75, text_to_display)
     # menu interaction loop
     while True:
         # display the menu and wait for a short time (50 ms)
@@ -268,17 +272,17 @@ def difficultyMenu(full_grid_width):
             # get the x and y coordinates of the location at which the mouse has
             # most recently been left-clicked
             mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
-            if easy_x <= mouse_x <= easy_y + button_w:
+            if easy_x <= mouse_x <= easy_x + button_w:
                 if easy_y <= mouse_y <= easy_y + button_h:
                     return 250  # easy mode value
-            if easy_x <= mouse_x <= medium_y + button_w:
+            if easy_x <= mouse_x <= easy_x + button_w:
                 if medium_y <= mouse_y <= medium_y + button_h:
                     return 150
-            if easy_x <= mouse_x <= hard_y + button_w:
+            if easy_x <= mouse_x <= easy_x + button_w:
                 if hard_y <= mouse_y <= hard_y + button_h:
                     return 50
-            if menu_x <= mouse_x <= menu_y + button_w + 2.25:
-                if menu_y <= mouse_y <= menu_y + button_h - 0.5:
+            if menu_x <= mouse_x <= menu_x + menu_w :
+                if menu_y <= mouse_y <= menu_y + menu_h:
                     start()
                     break
 
