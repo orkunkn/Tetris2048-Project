@@ -91,7 +91,6 @@ def start():
             if not success:
                 # get the tile matrix of the tetromino
                 tiles_to_place = current_tetromino.tile_matrix
-
                 # update the game grid by adding the tiles of the tetromino
                 game_over = grid.update_grid(tiles_to_place)
                 # do the merge
@@ -184,6 +183,7 @@ def display_game_menu(full_grid_height, full_grid_width):
                 if ht_y <= mouse_y <= ht_y + button_h:
                     howToMenu(full_grid_width)
 
+
 # method for displaying how to play menu
 def howToMenu(full_grid_width):
     background_color = Color(160, 160, 160)
@@ -208,7 +208,7 @@ def howToMenu(full_grid_width):
     stddraw.text((full_grid_width - 1) / 2, 13, text_to_display)
     text_to_display = "Rotate Piece : A and D Keys"
     stddraw.text((full_grid_width - 1) / 2, 11, text_to_display)
-    text_to_display = "Drop Piece : Spacebar"
+    text_to_display = "Drop Piece : Space bar"
     stddraw.text((full_grid_width - 1) / 2, 9, text_to_display)
     text_to_display = "Pause Game : Escape"
     stddraw.text((full_grid_width - 1) / 2, 7, text_to_display)
@@ -241,13 +241,13 @@ def difficultyMenu(full_grid_width):
     medium_y = 9
     hard_y = 4
     menu_x, menu_y = (full_grid_width - 1) / 3, 0.25
-    menu_w, menu_h = button_w - 2.5, button_h-0.5
+    menu_w, menu_h = button_w - 2.5, button_h - 0.5
     # display the difficulty buttons as a filled rectangle
     stddraw.setPenColor(button_color)
     stddraw.filledRectangle(easy_x, easy_y, button_w, button_h)
     stddraw.filledRectangle(easy_x, medium_y, button_w, button_h)
     stddraw.filledRectangle(easy_x, hard_y, button_w, button_h)
-    stddraw.filledRectangle(menu_x, menu_y,menu_w, menu_h)
+    stddraw.filledRectangle(menu_x, menu_y, menu_w, menu_h)
     # display the texts on buttons
     stddraw.setFontFamily("Arial")
     stddraw.setFontSize(40)
@@ -262,7 +262,7 @@ def difficultyMenu(full_grid_width):
     stddraw.text((full_grid_width - 1) / 2, hard_y + 1, text_to_display)
     stddraw.setFontSize(30)
     text_to_display = "Main Menu"
-    stddraw.text(menu_x+2.5, menu_y+0.75, text_to_display)
+    stddraw.text(menu_x + 2.5, menu_y + 0.75, text_to_display)
     # menu interaction loop
     while True:
         # display the menu and wait for a short time (50 ms)
@@ -281,7 +281,7 @@ def difficultyMenu(full_grid_width):
             if easy_x <= mouse_x <= easy_x + button_w:
                 if hard_y <= mouse_y <= hard_y + button_h:
                     return 50
-            if menu_x <= mouse_x <= menu_x + menu_w :
+            if menu_x <= mouse_x <= menu_x + menu_w:
                 if menu_y <= mouse_y <= menu_y + menu_h:
                     start()
                     break

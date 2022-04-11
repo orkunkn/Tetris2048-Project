@@ -105,27 +105,19 @@ class GameGrid:
     def merge(self):
         # recursion check variable
         merged = False
-        # determine the merge width border
-        if self.current_tetromino.bottom_left_corner.x + self.current_tetromino.n > len(self.tile_matrix[0]):
-            right_merge_border = len(self.tile_matrix[0])
-        else:
-            right_merge_border = self.current_tetromino.bottom_left_corner.x + self.current_tetromino.n
         # determine the merge height border
         if self.current_tetromino.bottom_left_corner.y + self.current_tetromino.n > len(self.tile_matrix):
             up_merge_border = len(self.tile_matrix)
         else:
             up_merge_border = self.current_tetromino.bottom_left_corner.y + self.current_tetromino.n
-        # check in tetrominos height border
-        for col in range(1, up_merge_border):
-            # check in tetrominos width border
-            for row in range(self.current_tetromino.bottom_left_corner.x, right_merge_border):
+        # check in tetrominoes height border
+        for col in range(1, len(self.tile_matrix)):
+            # check in tetrominoes width border
+            for row in range(len(self.tile_matrix[0])):
                 # check if there are blocks on the controlled coordinates
                 if self.tile_matrix[col][row] is not None and self.tile_matrix[col - 1][row] is not None:
                     # check if the tiles in same column have the same number
                     if self.tile_matrix[col - 1][row].number == self.tile_matrix[col][row].number:
-                        # store the tiles initial color temporary
-                        temp_color = self.tile_matrix[col][row].background_color
-                        temp_number_color = self.tile_matrix[col][row].foreground_color
                         # change the merged tiles background colors to green, number colors to white
                         self.tile_matrix[col - 1][row].background_color = Color(0, 255, 0)
                         self.tile_matrix[col][row].background_color = Color(0, 255, 0)
@@ -133,34 +125,37 @@ class GameGrid:
                         self.tile_matrix[col][row].foreground_color = Color(255, 255, 255)
                         # display the green tiles
                         self.display()
-                        # reverse the tile's color
-                        self.tile_matrix[col - 1][row].foreground_color = temp_number_color
-                        self.tile_matrix[col - 1][row].background_color = temp_color
                         # multiply the tile's number by 2
                         self.tile_matrix[col - 1][row].number *= 2
                         # add merged numbers to score
                         self.score += self.tile_matrix[col - 1][row].number
                         # delete top tile
                         self.tile_matrix[col][row] = None
+                        # update the grid colors
+                        self.updateGridColor()
                         # check for hanging tiles on the merge column
                         for i in range(col, up_merge_border):
-                            # check if there is a tile with a space under it
-                            if self.tile_matrix[i - 1][row] is None and self.tile_matrix[i][row] is not None:
-                                # move the tile down
-                                self.tile_matrix[i][row].move(0, -1)
-                                # move the tile down in matrix
-                                self.tile_matrix[i - 1][row] = self.tile_matrix[i][row]
-                                # delete the top tile
-                                self.tile_matrix[i][row] = None
-                                self.display()
+                            if self.tile_matrix[i][row] is not None:
+                                self.drop_tile(i, row)
                         # change recursion variable to true
                         merged = True
-                        self.updateGridColor()
                         # quit the loop
                         break
         # if a merge happened, call merge function again
         if merged:
             self.merge()
+
+    # Method for dropping tile
+    def drop_tile(self, i, k):
+        # check if there is a tile with a space under it
+        while self.tile_matrix[i - 1][k] is None:
+            # move the tile down
+            self.tile_matrix[i][k].move(0, -1)
+            # move the tile down in matrix
+            self.tile_matrix[i - 1][k] = self.tile_matrix[i][k]
+            # delete the top tile
+            self.tile_matrix[i][k] = None
+            self.display()
 
     # Method for moving isolated tiles down
     def remove_gaps(self):
@@ -172,40 +167,61 @@ class GameGrid:
             for k in range(len(self.tile_matrix[0])):
                 # check if controlled tile exist
                 if self.tile_matrix[i][k] is not None:
-                    # check if upper and bottom tiles do not exist
-                    if self.tile_matrix[i - 1][k] is None and self.tile_matrix[i + 1][k] is None:
+                    # check if bottom tile do not exist
+                    if self.tile_matrix[i - 1][k] is None:
                         # if controlled column is final column, only control the left side
                         if k == (len(self.tile_matrix[0]) - 1):
                             if self.tile_matrix[i][k - 1] is None:
                                 # drop the tile as long as it can
-                                while self.tile_matrix[i - 1][k] is None:
-                                    self.tile_matrix[i][k].move(0, -1)
-                                    self.tile_matrix[i - 1][k] = self.tile_matrix[i][k]
-                                    self.tile_matrix[i][k] = None
-                                    self.display()
+                                self.drop_tile(i, k)
+                                removed = True
+                            else:
+                                if self.tile_matrix[i][k-2] is None and self.tile_matrix[i - 1][k - 1] is None and self.tile_matrix[i + 1][k - 1] is None:
+                                    # drop the tile as long as it can
+                                    self.drop_tile(i, k)
+                                    # drop the left tile as long as it can
+                                    self.drop_tile(i, k-1)
                                     removed = True
                         # if controlled column is starting column, only control the right side
                         elif k == 0:
                             if self.tile_matrix[i][k + 1] is None:
                                 # drop the tile as long as it can
-                                while self.tile_matrix[i - 1][k] is None:
-                                    self.tile_matrix[i][k].move(0, -1)
-                                    self.tile_matrix[i - 1][k] = self.tile_matrix[i][k]
-                                    self.tile_matrix[i][k] = None
-                                    self.display()
+                                self.drop_tile(i, k)
+                                removed = True
+                            else:
+                                if self.tile_matrix[i][k+2] is None and self.tile_matrix[i - 1][k + 1] is None and self.tile_matrix[i + 1][k + 1] is None:
+                                    # drop the tile as long as it can
+                                    self.drop_tile(i, k)
+                                    # drop the right tile as long as it can
+                                    self.drop_tile(i, k+1)
                                     removed = True
 
                         else:
-                            if self.tile_matrix[i][k - 1] is None and self.tile_matrix[i][k + 1] is None:
-                                # drop the tile as long as it can
-                                while self.tile_matrix[i - 1][k] is None:
-                                    self.tile_matrix[i][k].move(0, -1)
-                                    self.tile_matrix[i - 1][k] = self.tile_matrix[i][k]
-                                    self.tile_matrix[i][k] = None
-                                    self.display()
+                            if self.tile_matrix[i][k - 1] is None:
+                                if self.tile_matrix[i][k + 1] is None:
+                                    # drop the tile as long as it can
+                                    self.drop_tile(i, k)
                                     removed = True
-        # if a remove happened, check for another removes
+                                else:
+                                    if self.tile_matrix[i][k+2] is None and self.tile_matrix[i-1][k+1] is None and self.tile_matrix[i+1][k+1] is None:
+                                        # drop the tile as long as it can
+                                        self.drop_tile(i, k)
+                                        # drop the right tile as long as it can
+                                        self.drop_tile(i, k+1)
+                                        removed = True
+                            else:
+                                if self.tile_matrix[i][k+1] is None:
+                                    if self.tile_matrix[i][k-2] is None and self.tile_matrix[i+1][k-1] is None and self.tile_matrix[i-1][k-1] is None:
+                                        # drop the tile as long as it can
+                                        self.drop_tile(i, k)
+                                        # drop the left tile as long as it can
+                                        self.drop_tile(i, k-1)
+                                        removed = True
+
+        self.display()
+        # if a remove happened, check for another removes and merges
         if removed:
+            self.merge()
             self.remove_gaps()
 
     # Method for drawing the cells and the lines of the grid
