@@ -170,7 +170,7 @@ class GameGrid:
                     # check if bottom tile do not exist
                     if self.tile_matrix[i - 1][k] is None:
                         # if controlled column is final column, only control the left side
-                        if k == (len(self.tile_matrix[0]) - 1):
+                        if k == (len(self.tile_matrix[0]) - 1) or k == (len(self.tile_matrix[0]) - 2):
                             if self.tile_matrix[i][k - 1] is None:
                                 # drop the tile as long as it can
                                 self.drop_tile(i, k)
@@ -183,7 +183,7 @@ class GameGrid:
                                     self.drop_tile(i, k-1)
                                     removed = True
                         # if controlled column is starting column, only control the right side
-                        elif k == 0:
+                        elif k == 0 or k == 1:
                             if self.tile_matrix[i][k + 1] is None:
                                 # drop the tile as long as it can
                                 self.drop_tile(i, k)
